@@ -189,6 +189,7 @@ GameObject:
   - component: {fileID: 1007089209}
   - component: {fileID: 1007089208}
   - component: {fileID: 1007089207}
+  - component: {fileID: 1007089211}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -259,6 +260,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0.42100003, z: 0}
+--- !u!114 &1007089211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1007089206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ab8fe4fcb128f74996994c2d0d21aa0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cubeTrans: {fileID: 2112003246}
+  mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  cubeMaterial: {fileID: 2100000, guid: daf99ec2c84d56a4e8d27424bc3307c3, type: 2}
+  rotateSpeed: 60
 --- !u!1 &1120554197
 GameObject:
   m_ObjectHideFlags: 0
@@ -345,10 +361,10 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2112003245}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.054323994, y: 0.3080863, z: 0.16493224, w: -0.9353765}
   m_LocalPosition: {x: -0.64, y: 0.75, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 220.767, z: -20}

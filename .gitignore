@@ -1,4 +1,7 @@
-
+UnityPackageManager
+obj
+Temp
+Library
 Library/AnnotationManager
 Library/assetDatabase3
 Library/AssetImportState
