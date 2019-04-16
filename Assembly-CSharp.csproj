@@ -55,13 +55,13 @@
      <Compile Include="Assets\Sctipts\GlobalTest.cs" />
      <Compile Include="Assets\Sctipts\PointAndPolygonCollision\PointAndPolygon.cs" />
      <Compile Include="Assets\Shader\CustomRender\1.DrawMesh\DrawMeshAndSkybox.cs" />
-     <Compile Include="Assets\Shader\Depth\CameraDepth.cs" />
-     <Compile Include="Assets\Shader\GeometryShader\2.MotionBlur\MotionBlur.cs" />
+     <Compile Include="Assets\Shader\Depth\1.SimpleDepth\CameraDepth.cs" />
+     <Compile Include="Assets\Shader\Depth\2.MotionBlur\MotionBlur.cs" />
      <Compile Include="Assets\Shader\PostEffectBase\PostEffectBase.cs" />
      <None Include="Assets\Shader\RimFade\RimFade.shader" />
-     <None Include="Assets\Shader\Depth\CameraDepth.shader" />
+     <None Include="Assets\Shader\Depth\1.SimpleDepth\CameraDepth.shader" />
      <None Include="Assets\Shader\GeometryShader\1.SimpleWire\SimpleWire.shader" />
-     <None Include="Assets\Shader\GeometryShader\2.MotionBlur\MotionBlur.shader" />
+     <None Include="Assets\Shader\Depth\2.MotionBlur\MotionBlur.shader" />
      <None Include="Assets\Shader\GeometryShader\WireFrame\WireFrame.shader" />
      <None Include="Assets\Shader\Background\Background.shader" />
      <None Include="Assets\Shader\Instance\MyShaderWithInstance.shader" />
