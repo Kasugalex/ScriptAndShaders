@@ -21,7 +21,7 @@ Shader "Unlit/MotionBlur"
 			float4x4 _CurrentViewProjectionInverseMatrix;
 			float4x4 _PreviousViewProjectionMatrix;
 			half _BlurSize;
-			half _SampleVelocity;
+			half _SampleFactor;
 			half _SampleTimes;
 			struct v2f {
 				float4 pos : SV_POSITION;
@@ -49,7 +49,7 @@ Shader "Unlit/MotionBlur"
 				float4 previousPos = mul(_PreviousViewProjectionMatrix, D / D.w);
 				previousPos /= previousPos.w;
 				
-				float2 velocity = (currentPos.xy - previousPos.xy)/_SampleVelocity;
+				float2 velocity = (currentPos.xy - previousPos.xy)/_SampleFactor;
 				
 				float2 uv = i.uv;
 				float4 c = tex2D(_MainTex, uv);

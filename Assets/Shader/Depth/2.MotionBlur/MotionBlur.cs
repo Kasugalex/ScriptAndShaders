@@ -11,11 +11,13 @@ public class MotionBlur : PostEffectBase
 
     private Matrix4x4 previousViewProjectionMatrix;
 
+	[Tooltip("采样次数")]
     [Range(0, 10)]
     public int sampleTimes = 3;
 
+	[Tooltip("采样距离,值越大模糊越精细")]
     [Range(1.0f, 20.0f)]
-    public float sampleVelocity = 2.0f;
+    public float sampleFactor = 2.0f;
     void Start()
     {
         _camera.depthTextureMode |= DepthTextureMode.Depth;
@@ -28,7 +30,7 @@ public class MotionBlur : PostEffectBase
 
             material.SetFloat("_BlurSize", blurSize);
             material.SetFloat("_SampleTimes", sampleTimes);
-            material.SetFloat("_SampleVelocity", sampleVelocity);
+            material.SetFloat("_SampleFactor", sampleFactor);
             material.SetMatrix("_PreviousViewProjectionMatrix", previousViewProjectionMatrix);
             Matrix4x4 currentViewProjectionMatrix = _camera.projectionMatrix * _camera.worldToCameraMatrix;
             Matrix4x4 currentViewProjectionInverseMatrix = currentViewProjectionMatrix.inverse;
