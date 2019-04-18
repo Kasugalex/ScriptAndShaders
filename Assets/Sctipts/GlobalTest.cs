@@ -11,7 +11,6 @@ public class GlobalTest : MonoBehaviour
     void Start()
     {
         // EqualTest();
-        CreateDirectory(createPath);
     }
 
     // Update is called once per frame
@@ -36,21 +35,4 @@ public class GlobalTest : MonoBehaviour
         print($"{a == b}");
         print($"{a.ToCharArray() == b.ToCharArray()}");
     }
-
-    int times = 0;
-    string createPath = "G:/";
-
-    string createDirName = "1";
-    private void CreateDirectory(string path)
-    {
-        if (times >= 82)
-            return;
-
-        string newPath = path + createDirName;
-        Directory.CreateDirectory(newPath);
-        times++;
-        CreateDirectory(newPath + "/1");
-    }
-
-
 }
