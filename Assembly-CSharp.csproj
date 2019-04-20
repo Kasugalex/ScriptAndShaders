@@ -55,6 +55,7 @@
      <Compile Include="Assets\Sctipts\GlobalTest.cs" />
      <Compile Include="Assets\Sctipts\PointAndPolygonCollision\PointAndPolygon.cs" />
      <Compile Include="Assets\Sctipts\TextureCombine\TextureCombine.cs" />
+     <Compile Include="Assets\Shader\CommandBuffer\CBTest1\CommandBufferTest1.cs" />
      <Compile Include="Assets\Shader\CustomRender\1.DrawMesh\DrawMeshAndSkybox.cs" />
      <Compile Include="Assets\Shader\Depth\1.SimpleDepth\CameraDepth.cs" />
      <Compile Include="Assets\Shader\Depth\2.MotionBlur\MotionBlur.cs" />
