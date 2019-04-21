@@ -61,6 +61,7 @@
      <Compile Include="Assets\Shader\Depth\2.MotionBlur\MotionBlur.cs" />
      <Compile Include="Assets\Shader\KiMosaic\MySelfThink\KiMosaicTest.cs" />
      <Compile Include="Assets\Shader\PostEffectBase\PostEffectBase.cs" />
+     <None Include="Assets\Shader\NoAddAlpha\NoAddAlpha.shader" />
      <None Include="Assets\Shader\RimFade\RimFade.shader" />
      <None Include="Assets\Shader\Depth\1.SimpleDepth\CameraDepth.shader" />
      <None Include="Assets\Shader\GeometryShader\1.SimpleWire\SimpleWire.shader" />
@@ -70,6 +71,7 @@
      <None Include="Assets\Shader\Instance\MyShaderWithInstance.shader" />
      <None Include="Assets\Shader\Noise\PerlinNoise\PerlinNoise.shader" />
      <None Include="Assets\Shader\Noise\WaterDistrub\WaterDistrub.shader" />
+     <None Include="Assets\Shader\UVScroll\UVScroll.shader" />
      <None Include="Assets\Shader\KiMosaic\MySelfThink\KiMosaicTest.shader" />
      <None Include="Assets\Shader\NormalMap\NormalMap.shader" />
      <None Include="Assets\Shader\CustomRender\1.DrawMesh\SkyBoxShader.shader" />
