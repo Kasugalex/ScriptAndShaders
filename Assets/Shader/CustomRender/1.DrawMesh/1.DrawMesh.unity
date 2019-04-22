@@ -274,6 +274,8 @@ MonoBehaviour:
   cubeTrans: {fileID: 2112003246}
   mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   cubeMaterial: {fileID: 2100000, guid: daf99ec2c84d56a4e8d27424bc3307c3, type: 2}
+  skybox:
+    skyBoxMaterial: {fileID: 2100000, guid: de4b867764895064f9db71295046cfe5, type: 2}
   rotateSpeed: 60
 --- !u!1 &1120554197
 GameObject:
@@ -361,7 +363,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2112003245}
-  m_LocalRotation: {x: -0.054323994, y: 0.3080863, z: 0.16493224, w: -0.9353765}
+  m_LocalRotation: {x: -0.10007248, y: 0.5675386, z: -0.14191289, w: 0.8048268}
   m_LocalPosition: {x: -0.64, y: 0.75, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
