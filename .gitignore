@@ -1,5 +1,6 @@
 UnityPackageManager
 obj
+.vs
 Temp
 Library
 Library/AnnotationManager
