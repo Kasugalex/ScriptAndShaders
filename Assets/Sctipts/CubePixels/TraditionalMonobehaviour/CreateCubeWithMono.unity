@@ -158,6 +158,8 @@ MonoBehaviour:
   GenerateOffset_X: 0
   GenerateOffset_Y: 0
   material: {fileID: 2100000, guid: 81bb4a20d410bcd4aa1ebdc5a29da692, type: 2}
+  texture: {fileID: 2800000, guid: 6498c44af25a4214dad16d480f0b5ae3, type: 3}
+  shader: {fileID: 7200000, guid: f6af0dfa8a863e449b501523854ad889, type: 3}
 --- !u!1 &834526618
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,6 +9,8 @@ public class CreateCubeWithMono : MonoBehaviour {
     public float GenerateOffset_X = 10;
     public float GenerateOffset_Y = 10;
     public Material material;
+    public Texture2D texture;
+    public ComputeShader shader;
     void Start()
     {
         material.SetPass(0);
@@ -28,6 +30,12 @@ public class CreateCubeWithMono : MonoBehaviour {
         first.GetComponent<Renderer>().material = material;
         first.GetComponent<MeshFilter>().mesh = mesh;
 
+        int kernel = shader.FindKernel("CSMain");
+
+
+        shader.SetTexture(kernel, "InputImage", texture);
+
+
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
@@ -35,6 +43,18 @@ public class CreateCubeWithMono : MonoBehaviour {
                 GameObject obj = Instantiate(first, root);
                 obj.name = string.Format("{0}:{1}", y, x);
                 obj.transform.localPosition = new Vector3(GenerateOffset_X + x, GenerateOffset_Y + y, 0);
+
+                RenderTexture rt = new RenderTexture(100, 100, 24);
+                rt.enableRandomWrite = true;
+                rt.Create();
+                shader.SetInt("startX", y * 100);
+                shader.SetInt("endX", (y + 1) * 100);
+                shader.SetInt("startY", x * 100);
+                shader.SetInt("endY", (x + 1) * 100);
+
+                shader.SetTexture(kernel, "Result", rt);
+                obj.GetComponent<Renderer>().material.mainTexture = rt;
+                
             }
         }
 
