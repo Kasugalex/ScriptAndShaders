@@ -7,10 +7,10 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: CreateCubeWithMono
-  m_Shader: {fileID: 4800000, guid: 1225aa0b621c3c243a5bfc7ff3af77f1, type: 3}
+  m_Shader: {fileID: 4800000, guid: 559282c53fc54e4419374a7c8eb5c0ea, type: 3}
   m_ShaderKeywords: _GLOSSYREFLECTIONS_OFF _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A _SPECULARHIGHLIGHTS_OFF
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -39,7 +39,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: cfe9fd530c554a1448baaccc2072a385, type: 3}
+        m_Texture: {fileID: 2800000, guid: 1e92608bb738f144996beac448419e5b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
