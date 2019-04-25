@@ -32,14 +32,14 @@
 			{
 				ps_input o;
 				float3 pos = buf_Points[id]; //存储点的位置，buf_Points在compute shader已放置了点位置
-				o.color = buf_Colors[id];
+				o.color = buf_Colors[id];	//
 				o.pos = mul(UNITY_MATRIX_VP, float4(pos, 1));
 				return o;
 			}
 			
 			fixed4 frag (ps_input i) : SV_Target
 			{
-				return fixed4(i.color,0.5);
+				return fixed4(i.color,1);
 			}
 			ENDCG
 		}
