@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a3bdb2cd68f901469e7cc149151eb49, type: 3}
-  m_Name: GPUParticle
+  m_Name: OutLine
   m_EditorClassIdentifier: 
   debugViews:
     m_Enabled: 1
@@ -100,10 +100,10 @@ MonoBehaviour:
     m_Enabled: 1
     m_Settings:
       bloom:
-        intensity: 3.19
-        threshold: 1.13
+        intensity: 75.7
+        threshold: 0.8
         softKnee: 1
-        radius: 4.58
+        radius: 1.6
         antiFlicker: 0
       lensDirt:
         texture: {fileID: 0}

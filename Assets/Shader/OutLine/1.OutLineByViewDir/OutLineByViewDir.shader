@@ -3,6 +3,7 @@
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
+		_Color("Color",Color) =(1,1,1,1)
 	}
 	SubShader
 	{
@@ -34,7 +35,7 @@
 
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
-			
+			fixed4 _Color;
 			v2f vert (appdata v)
 			{
 				v2f o;
@@ -52,7 +53,7 @@
 				float alpha = 1 - saturate(dot(i.viewDir,i.normal));
 				fixed3 col = tex2D(_MainTex, i.uv);
 
-				return fixed4(col,alpha);
+				return fixed4(col * _Color,alpha);
 			}
 			ENDCG
 		}
