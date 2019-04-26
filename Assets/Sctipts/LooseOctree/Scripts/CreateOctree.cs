@@ -30,6 +30,7 @@ public class CreateOctree : MonoBehaviour {
 
     private void OnDrawGizmos()
     {
+        if (boundsTree == null) return;
         boundsTree.DrawAllBounds();
         boundsTree.DrawAllObjects();
 
