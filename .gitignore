@@ -1,8 +1,8 @@
 UnityPackageManager
 obj
-.sln
-.csproj
-.vs
+*.sln
+*.csproj
+*.vs
 Temp
 Library
 Library/AnnotationManager
