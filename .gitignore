@@ -1,5 +1,7 @@
 UnityPackageManager
 obj
+.sln
+.csproj
 .vs
 Temp
 Library
