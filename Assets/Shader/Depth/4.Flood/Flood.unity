@@ -502,8 +502,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shader: {fileID: 4800000, guid: d05a1d7a1e57b9f40aa14aa4b7a281c3, type: 3}
-  WaterColor: {r: 0, g: 0.46206903, b: 1, a: 0.322}
-  WaterHeight: -0.07
+  WaterColor: {r: 0, g: 1, b: 0.006896496, a: 0.322}
+  WaterHeight: -0
 --- !u!1 &1173900925
 GameObject:
   m_ObjectHideFlags: 0

@@ -45,7 +45,9 @@
 
 				int ix = (int)o.uv.z;
 				int iy = (int)o.uv.w;
-				o.frustumDir = _FrustumDir[ix + 2 * iy];
+				//好像两个都行
+				//o.frustumDir = _FrustumDir[ix + 2 * iy];
+				o.frustumDir = _FrustumDir[2 * iy];
 				return o;
 			}
 			
