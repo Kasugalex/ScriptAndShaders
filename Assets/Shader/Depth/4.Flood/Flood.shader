@@ -42,12 +42,13 @@
 				v2f o;
 				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv = float4(v.uv,v.uv);
-
+				//左下角uv (0,0) bottomLeft 对应矩阵第一行
+				//右下角uv (1,0) bottomRight对应矩阵第二行
+				//左上角uv (0,1) topLeft	对应矩阵第三行
+				//右上角uv (1,1) topRight	对应矩阵第四行
 				int ix = (int)o.uv.z;
 				int iy = (int)o.uv.w;
-				//好像两个都行
-				//o.frustumDir = _FrustumDir[ix + 2 * iy];
-				o.frustumDir = _FrustumDir[2 * iy];
+				o.frustumDir = _FrustumDir[ix + 2 * iy];
 				return o;
 			}
 			
