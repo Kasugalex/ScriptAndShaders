@@ -5,13 +5,15 @@
 		_MainTex ("Texture", 2D) = "white" {}
 		_NoiseTex("Noise",2D) = "white"{}
 		_Factor("Factor",float) = 0.1
+		_Alpha("Alpha",Range(0.0,1.0)) = 1.0
 	}
 	SubShader
 	{
-		Tags { "RenderType"="Opaque" }
+		Tags { "Queue" = "Transparent" "RenderType"="Opaque" }
 
 		Pass
 		{
+			Blend SrcAlpha OneMinusSrcAlpha
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
@@ -33,7 +35,7 @@
 			float4 _MainTex_ST;
 			sampler2D _NoiseTex;
 			float _Factor;
-			
+			fixed _Alpha;
 			v2f vert (appdata v)
 			{
 				v2f o;
@@ -48,6 +50,7 @@
 
 				fixed4 noise = tex2D(_NoiseTex,fixed2(i.uv.x + _Time.x,i.uv.y));
 				fixed4 col = tex2D(_MainTex, i.uv + noise.xy * _Factor);
+				col.a = _Alpha;
 				return col;
 			}
 			ENDCG
