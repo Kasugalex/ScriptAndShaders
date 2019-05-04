@@ -37,20 +37,27 @@ public class SortTest : MonoBehaviour
     }
     private void Sort()
     {
-        WatchExecuteTime.WatchExecute(ShellSort);
+        //WatchExecuteTime.WatchExecute(ShellSort);
+        WatchExecuteTime.WatchExecute(InsertSort);
     }
     private void ShellSort()
     {
         SortAlgorithm.ShellSort(Array);
     }
 
+    private void InsertSort()
+    {
+        SortAlgorithm.InsertSort(Array);
+    }
 
 
- 	private void OnGUI() {
+
+    private void OnGUI()
+    {
         GUIStyle style = new GUIStyle();
         style.normal.textColor = Color.white;
         style.fontSize = 40;
         int width = 500;
-        GUI.TextArea(new Rect((Screen.width >> 1) - width / 2, 100, width, 200), "运行后按下鼠标左键进行排序",style);
+        GUI.TextArea(new Rect((Screen.width >> 1) - width / 2, 100, width, 200), "运行后按下鼠标左键进行排序", style);
     }
 }
