@@ -1,6 +1,10 @@
 {
   "dependencies": {
-    "com.unity.package-manager-ui": "2.0.3",
+    "com.unity.2d.ik": "1.0.8-preview.1",
+    "com.unity.burst": "0.2.4-preview.24",
+    "com.unity.entities": "0.0.12-preview.24",
+    "com.unity.jobs": "0.0.7-preview.6",
+    "com.unity.package-manager-ui": "2.0.7",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.assetbundle": "1.0.0",
