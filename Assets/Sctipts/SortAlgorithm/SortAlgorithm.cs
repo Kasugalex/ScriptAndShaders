@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -91,4 +92,66 @@ public class SortAlgorithm
 
     #endregion
 
+    #region 桶排序
+
+    public static void BucketSort(int[] array,int bucketSize)
+    {
+ 
+        if (array == null || bucketSize < 1) return;
+
+        int minValue = array[0];
+        int maxValue = array[0];
+
+        for (int i = 0; i < array.Length; i++)
+        {
+            if (array[i] < minValue) minValue = array[i];
+            else if (array[i] > maxValue) maxValue = array[i];
+        }
+
+        int bucketCount = (int)Mathf.Floor((maxValue - minValue) / bucketSize) + 1;
+        int[][] buckets = new int[bucketCount][];
+
+        for (int i = 0; i < array.Length; i++)
+        {
+
+            int index = (int)Mathf.Floor((array[i] - minValue) / bucketSize);
+            buckets[index] = ArrAppend(buckets[index], array[i]);
+        }
+
+        int arrIndex = 0;
+
+        foreach (int[] bucket in buckets)
+        {
+            if (bucket == null || bucket.Length <= 0) continue;
+
+            InsertSort(bucket);
+
+            foreach (var value in bucket)
+            {
+                array[arrIndex++] = value;
+            }
+        }
+
+        buckets = null;
+    }
+
+    private static int[] ArrAppend(int[] arr,int value)
+    {
+        if (arr == null)
+            arr = new int[0];
+
+        int length = arr.Length;
+        int[] retArray = new int[length + 1];
+
+        for (int i = 0; i < length; i++)
+        {
+            retArray[i] = arr[i];
+        }
+
+        retArray[retArray.Length - 1] = value;
+
+        return retArray;
+    }
+
+    #endregion
 }

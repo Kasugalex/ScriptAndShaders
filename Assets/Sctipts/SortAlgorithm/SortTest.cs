@@ -31,14 +31,15 @@ public class SortTest : MonoBehaviour
         ValueAbsolute = ValueAbsolute < 0 ? -ValueAbsolute : ValueAbsolute;
         for (int i = 0; i < ArrayLength; i++)
         {
-            int random = Random.Range(-ValueAbsolute, ValueAbsolute);
+            int random = Random.Range(0, ValueAbsolute);
             Array[i] = random;
         }
     }
     private void Sort()
     {
         //WatchExecuteTime.WatchExecute(ShellSort);
-        WatchExecuteTime.WatchExecute(InsertSort);
+        //WatchExecuteTime.WatchExecute(InsertSort);
+        WatchExecuteTime.WatchExecute(BucketSort);
     }
     private void ShellSort()
     {
@@ -50,7 +51,10 @@ public class SortTest : MonoBehaviour
         SortAlgorithm.InsertSort(Array);
     }
 
-
+    private void BucketSort()
+    {
+        SortAlgorithm.BucketSort(Array, ArrayLength);
+    }
 
     private void OnGUI()
     {
