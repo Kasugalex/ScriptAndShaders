@@ -5,7 +5,10 @@ using System.Reflection;
 [ExecuteInEditMode]
 public class BinarySearch : MonoBehaviour
 {
+    [Range(0, 1000000)]
     public int ArrayLength = 25;
+    [SerializeField]
+    private int MaxValue = 200;
     [SerializeField]
     private int searchValue;
     private int[] sortArray;
@@ -19,7 +22,7 @@ public class BinarySearch : MonoBehaviour
             sortArray = new int[ArrayLength];
             for (int i = 0; i < ArrayLength; i++)
             {
-                int value = Random.Range(0, 3000);
+                int value = Random.Range(0, MaxValue);
                 sortArray[i] = value;
             }
             searchValue = sortArray[Random.Range(0, sortArray.Length)];
