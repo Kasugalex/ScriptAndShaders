@@ -11,8 +11,15 @@ public class BinarySearch : MonoBehaviour
     private int MaxValue = 200;
     [SerializeField]
     private int searchValue;
+    [SerializeField]
     private int[] sortArray;
 
+    public enum SearchType
+    {
+        Binary,
+        BinaryTree
+    }
+    public SearchType searchType = SearchType.Binary;
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -20,18 +27,33 @@ public class BinarySearch : MonoBehaviour
             ClearLog.Clear();
             sortArray = null;
             sortArray = new int[ArrayLength];
-            for (int i = 0; i < ArrayLength; i++)
+            if (searchType == SearchType.Binary)
             {
-                int value = Random.Range(0, MaxValue);
-                sortArray[i] = value;
+                for (int i = 0; i < ArrayLength; i++)
+                {
+                    int value = Random.Range(0, MaxValue);
+                    sortArray[i] = value;
+                }
+                searchValue = sortArray[Random.Range(0, sortArray.Length)];
+
+                WatchExecuteTime.WatchExecute(QuickSort);
+
+                WatchExecuteTime.WatchExecute(RecursiveSearch);
+
+                WatchExecuteTime.WatchExecute(NonRecursiveSearch);
             }
-            searchValue = sortArray[Random.Range(0, sortArray.Length)];
+            else if(searchType == SearchType.BinaryTree)
+            {
+                BinaryTreeSearch tree = new BinaryTreeSearch();
+                for (int i = 0; i < ArrayLength; i++)
+                {
+                    int value = Random.Range(0, MaxValue);
+                    sortArray[i] = value;
+                    tree.Insert(value);
+                }
 
-            WatchExecuteTime.WatchExecute(QuickSort);
-
-            WatchExecuteTime.WatchExecute(RecursiveSearch);
-
-            WatchExecuteTime.WatchExecute(NonRecursiveSearch);
+                tree.LogAll(tree.root);
+            }
         }
     }
 
@@ -57,11 +79,11 @@ public class BinarySearch : MonoBehaviour
 		
         fontStyle.normal.textColor = Color.white;
         int width = 500;
-        GUI.TextArea(new Rect(650,100,width,width),"场景运行后按下鼠标左键即可看输出结果",fontStyle);
+        GUI.TextArea(new Rect(650,100,width,width),"选择排序方式并鼠标左键即可看输出结果",fontStyle);
 	}
 }
 
-public static class BinarySearchFunc
+public class BinarySearchFunc
 {
 
     public static int BinarySearch(int[] arr, int value)
@@ -95,5 +117,68 @@ public static class BinarySearchFunc
         if (value > arr[middle])
             return BinarySearch(arr, value, middle + 1, high);
         return middle;
+    }
+}
+
+public class BinaryTreeSearch
+{
+    private int node;
+    public BinaryTreeSearch root;
+    public BinaryTreeSearch left;
+    public BinaryTreeSearch right;
+
+    public void Insert(int value)
+    {
+        BinaryTreeSearch Parent;
+        //将所需插入的数据包装进节点
+        BinaryTreeSearch newNode = new BinaryTreeSearch();
+        newNode.node = value;
+
+        //如果为空树，则插入根节点
+        if (root == null)
+        {
+            root = newNode;
+        }
+        //否则找到合适叶子节点位置插入
+        else
+        {
+            BinaryTreeSearch Current = root;
+            while (true)
+            {
+                Parent = Current;
+                if (newNode.node < Current.node)
+                {
+                    Current = Current.left;
+                    if (Current == null)
+                    {
+                        Parent.left = newNode;
+                        //插入叶子后跳出循环
+                        break;
+                    }
+                }
+                else
+                {
+                    Current = Current.right;
+                    if (Current == null)
+                    {
+                        Parent.right = newNode;
+                        //插入叶子后跳出循环
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public void LogAll(BinaryTreeSearch tree)
+    {
+        if (tree == null)
+        {
+            return;
+        }
+
+        LogAll(tree.left);
+        Debug.Log(tree.node);
+        LogAll(tree.right);
     }
 }
