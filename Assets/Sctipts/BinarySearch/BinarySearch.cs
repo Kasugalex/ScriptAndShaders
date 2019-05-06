@@ -52,11 +52,14 @@ public class BinarySearch : MonoBehaviour
                     tree.Insert(value);
                 }
 
-                tree.LogAll(tree.root);
+                //数组大了，赋值过程很漫长
+                if (ArrayLength <= 10000)
+                    WatchExecuteTime.WatchExecute(() => { tree.SortAll(tree.root, sortArray); }, "BinaryTreeSearch");
             }
         }
     }
 
+    #region 二分查找
     void QuickSort()
     {
         SortAlgorithm.QuickSort(sortArray, 0, sortArray.Length - 1);
@@ -71,8 +74,9 @@ public class BinarySearch : MonoBehaviour
     {
         Debug.LogFormat("非递归查询{0}的位置为:{1}", searchValue, BinarySearchFunc.BinarySearch(sortArray, searchValue));
     }
+    #endregion
 
-	 private void OnGUI() {
+    private void OnGUI() {
         GUIStyle fontStyle = new GUIStyle();
         fontStyle.normal.background = null;
         fontStyle.fontSize = 40;
@@ -170,15 +174,17 @@ public class BinaryTreeSearch
         }
     }
 
-    public void LogAll(BinaryTreeSearch tree)
+    int index = 0;
+    public void SortAll(BinaryTreeSearch tree, int[] sortArray)
     {
         if (tree == null)
         {
             return;
         }
 
-        LogAll(tree.left);
-        Debug.Log(tree.node);
-        LogAll(tree.right);
+        SortAll(tree.left, sortArray);
+        sortArray[index] = tree.node;
+        index++;
+        SortAll(tree.right, sortArray);
     }
 }
