@@ -39,6 +39,8 @@ public class VerticalText : MonoBehaviour
             space.Append(" ");
         }
 
+        string spaceStr = space.ToString();
+
 
         StringBuilder finalString = new StringBuilder();
 
@@ -61,7 +63,7 @@ public class VerticalText : MonoBehaviour
             chars[i] = VerticalContent.Replace(chars[i]);
 
             charsList[currentRow].Add(chars[i]);
-            charsList[currentRow].AddRange(space.ToString());
+            charsList[currentRow].AddRange(spaceStr);
 
             currentRow++;
         }
