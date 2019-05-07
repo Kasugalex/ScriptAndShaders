@@ -27,7 +27,7 @@ public class VerticalText : MonoBehaviour
 
     private void Start()
     {
-        SetVerticalText("《醉花阴》（李清照）_来测试_莫道不消魂，帘卷西风，人比黄花瘦。");
+        SetVerticalText("《醉花阴》（李清照）莫道不消魂，帘卷西风，人比黄花瘦。");
     }
 
     public void SetVerticalText(string inputText)
@@ -89,16 +89,17 @@ public static class VerticalContent
     /// </summary>
     private static Dictionary<char, char> SplitSymbol = new Dictionary<char, char>()
     {
-        {   ','    ,   ' '   },
-        {   '。'   ,   ' '   },
-        {   '.'    ,   ' '   },
-        {   '《'   ,   '︽'  },
-        {   '》'   ,   '︾'  },
-        {   '('    ,   '︵'  },
-        {   ')'    ,   '︶'  },
-        {   '（'    ,   '︵'  },
-        {   '）'    ,   '︶'  },
-        {   '_'    ,   '︳'   }
+        {   ','    ,   ' '    },
+        {   '。'   ,   ' '    },
+        {   '.'    ,   ' '    },
+        {   '《'   ,   '︽'   },
+        {   '》'   ,   '︾'   },
+        {   '('    ,   '︵'   },
+        {   ')'    ,   '︶'   },
+        {   '（'   ,   '︵'   },
+        {   '）'   ,   '︶'   },
+        {   '_'    ,   '︳'   },
+        {   '：'   ,   '¨'   }
 
     };
 
