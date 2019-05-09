@@ -10,21 +10,7 @@ public class GlobalTest : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        // EqualTest();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    void AndorOr()
-    {
-        int i = 10;
-        print(i & 1);
-        print(i | 0);
-        print(i & 3);
+        FindWithID();
     }
 
     void EqualTest()
@@ -34,5 +20,26 @@ public class GlobalTest : MonoBehaviour
 
         print($"{a == b}");
         print($"{a.ToCharArray() == b.ToCharArray()}");
+    }
+
+    void FindWithID()
+    {
+        UnityEngine.Object g = FindObjectFromInstanceID(-2724);
+        MeshRenderer mr = g as MeshRenderer;
+        print(mr.material.name);
+    }
+
+    public static UnityEngine.Object FindObjectFromInstanceID(int iid)
+    {
+        return (UnityEngine.Object)typeof(UnityEngine.Object).GetMethod("FindObjectFromInstanceID", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static).Invoke(null, new object[] { iid });
+
+    }
+}
+
+public static class GetComponentExtension
+{
+    public static T GetComponentWithName<T>(this GameObject self, string sourceName)
+    {
+        return GameObject.Find(sourceName).GetComponent<T>();
     }
 }
