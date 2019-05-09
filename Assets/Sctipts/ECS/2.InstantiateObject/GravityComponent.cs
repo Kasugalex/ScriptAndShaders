@@ -1,7 +1,8 @@
 ﻿using Unity.Entities;
 using UnityEngine;
-[System.Serializable]
-public class GravityComponentData : IComponentData
+
+
+public struct GravityComponentData : IComponentData
 {
     public float mass;
     public float delay;
