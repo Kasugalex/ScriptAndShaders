@@ -15,7 +15,6 @@ public class InstantiateObjectTest : MonoBehaviour
     {
         InstantiateAll();
     }
-
     void InstantiateAll(GameObject prefab = null)
     {
         var entityManager = World.Active.GetOrCreateManager<EntityManager>();
@@ -41,7 +40,7 @@ public class InstantiateObjectTest : MonoBehaviour
         {
             Vector3 pos = UnityEngine.Random.insideUnitSphere * 40;
 
-            pos.y = GravitySystem.Top;
+            pos.y = GravityJobSystem.Top;
             var entity = entities[i];
             entityManager.SetComponentData(entity, new Position { Value = pos });
             entityManager.SetComponentData(entity, new GravityComponentData { mass = Random.Range(0.5f, 3f), delay = 0.02f * i });
@@ -50,5 +49,6 @@ public class InstantiateObjectTest : MonoBehaviour
 
         entities.Dispose();
     }
+        
 
 }
