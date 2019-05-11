@@ -161,7 +161,7 @@ MonoBehaviour:
   size: 0.5
   intensity: 25
   automatic: 1
-  automaticDuration: 1
+  automaticDuration: 0.1
 --- !u!1 &429300580
 GameObject:
   m_ObjectHideFlags: 0
@@ -281,12 +281,11 @@ MonoBehaviour:
   - {fileID: 71118973}
   - {fileID: 2086656100}
   - {fileID: 1550575488}
-  color: {r: 1, g: 0, b: 0, a: 1}
+  color: {r: 0, g: 0.4546628, b: 1, a: 1}
   vertexCount: 30000
   updateShader: {fileID: 7200000, guid: 00e4ff67740b909469ee4297baee8a10, type: 3}
-  particleDisplayMaterial: {fileID: 2100000, guid: 35d3c1fb843e4134f99ad085a386530a,
-    type: 2}
-  deceleration: 0.98
+  particleDisplayMat: {fileID: 2100000, guid: 35d3c1fb843e4134f99ad085a386530a, type: 2}
+  deceleration: 1
 --- !u!1 &1550575486
 GameObject:
   m_ObjectHideFlags: 0
@@ -345,6 +344,7 @@ GameObject:
   - component: {fileID: 1764072666}
   - component: {fileID: 1764072665}
   - component: {fileID: 1764072664}
+  - component: {fileID: 1764072667}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -416,6 +416,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1764072667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1764072663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 11400000, guid: 872a1cb2d4a9a0a41bfce934b391322c, type: 2}
 --- !u!1 &1917398175
 GameObject:
   m_ObjectHideFlags: 0

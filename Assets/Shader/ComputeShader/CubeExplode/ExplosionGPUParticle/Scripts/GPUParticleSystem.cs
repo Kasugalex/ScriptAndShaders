@@ -7,11 +7,11 @@ using System.Runtime.InteropServices;
 
 namespace Kasug
 {
-    [Serializable]
+    [System.Serializable]
     public struct GPUParticle
     {
         public float mass;
-        public float lifeTime;
+        public float lifetime; // 0.0 ~ 1.0
         public Vector3 origin;
         public Vector3 pos;
         public Quaternion rot;
@@ -19,62 +19,58 @@ namespace Kasug
         public Vector3 vel;
         public Vector3 acc;
         public Color color;
-
+        public int reactive;
 
         public GPUParticle(float m, Vector3 p, Quaternion r, Vector3 s, Vector3 v, Vector3 a, Color c)
         {
             mass = m;
-            lifeTime = 0.5f;
+            lifetime = 0.5f;
             origin = pos = p;
             rot = r;
             scale = s;
             vel = v;
             acc = a;
             color = c;
+            reactive = 0;
         }
     };
 
-
     public class GPUParticleSystem : MonoBehaviour
     {
-        public ComputeBuffer ParticleBuffer { get; set; }
 
-        private MaterialPropertyBlock _block;
-        public MaterialPropertyBlock Block
+        public ComputeBuffer ParticleBuffer { get { return buffer; } }
+        public MaterialPropertyBlock block
         {
-            get { if (_block == null) _block = new MaterialPropertyBlock(); return _block; }
+            get
+            {
+                if (_block == null)
+                {
+                    _block = new MaterialPropertyBlock();
+                }
+                return _block;
+            }
         }
-
         public List<GPUParticleUpdater> updaters;
 
-        [SerializeField]
-        private Color color = Color.white;
-        [SerializeField]
-        private int vertexCount = 30000;
-        [SerializeField]
-        private ComputeShader updateShader;
-        [SerializeField]
-        private Material particleDisplayMaterial;
-        [SerializeField]
-        [Range(0.1f, 1.0f)]
-        private float deceleration = 0.98f;
+        [SerializeField] Color color = Color.white;
+        [SerializeField] int vertexCount = 30000;
+        [SerializeField] ComputeShader updateShader;
+        [SerializeField] Material particleDisplayMat;
+        [SerializeField, Range(0.1f, 1f)] float deceleration = 0.98f;
 
-        private Mesh mesh;
-        private List<GPUParticle> particles;
-        private Transform _trans;
+        Mesh mesh;
+        GPUParticle[] particles;
+        ComputeBuffer buffer;
+        MaterialPropertyBlock _block;
 
+        const int _Thread = 8;
 
-        const int Thread = 8;
-
-        private void Start()
+        protected void Start()
         {
-            _trans = transform;
-
             var sideCount = Mathf.FloorToInt(Mathf.Pow(vertexCount, 1f / 3f));
             var count = sideCount * sideCount * sideCount;
             var dsideCount = sideCount * sideCount;
-
-            particles = new List<GPUParticle>();
+            particles = new GPUParticle[count];
 
             var scale = (1f / sideCount);
             var offset = -Vector3.one * 0.5f;
@@ -89,25 +85,21 @@ namespace Kasug
                     {
                         var index = xoffset + yoffset + z;
                         var particle = new GPUParticle(Random.Range(0.5f, 1f), new Vector3(x, y, z) * scale + offset, Quaternion.identity, Vector3.one, Vector3.zero, Vector3.zero, Color.white);
-
-                        particles.Add(particle);
+                        particles[index] = particle;
                     }
                 }
             }
 
-
-            Block.SetFloat("_Size", scale);
+            block.SetFloat("_Size", scale);
 
             mesh = Build(sideCount);
-
         }
 
-        private void Update()
+        void Update()
         {
             CheckInit();
 
-            updaters.ForEach(updater => 
-            {
+            updaters.ForEach(updater => {
                 if (updater.gameObject.activeSelf)
                 {
                     updater.Dispatch(this);
@@ -115,37 +107,28 @@ namespace Kasug
             });
 
             float t = Time.timeSinceLevelLoad;
-
-            updateShader.SetVector("_Time", new Vector4(t / 20f, t * 2f, t * 3f));
+            updateShader.SetVector("_Time", new Vector4(t / 20f, t, t * 2f, t * 3f));
             updateShader.SetFloat("_DT", Time.deltaTime);
             updateShader.SetFloat("_Deceleration", deceleration);
 
             Dispatch("Update");
 
-            Block.SetBuffer("_Particles", ParticleBuffer);
-            Block.SetColor("_Color",color);
-            Graphics.DrawMesh(mesh, _trans.localToWorldMatrix, particleDisplayMaterial, 0, null, 0, Block);
-            
+            block.SetBuffer("_Particles", buffer);
+            block.SetColor("_Color", color);
+            Graphics.DrawMesh(mesh, transform.localToWorldMatrix, particleDisplayMat, 0, null, 0, block);
         }
 
-        private void Dispatch(string key)
+        void Dispatch(string key)
         {
             int kernel = updateShader.FindKernel(key);
-            updateShader.SetBuffer(kernel, "_Particles", ParticleBuffer);
-            updateShader.Dispatch(kernel, ParticleBuffer.count / Thread + 1, 1, 1);
-        }
-
-        private void CheckInit()
-        {
-            if (ParticleBuffer == null)
+            if (kernel < 0)
             {
-                ParticleBuffer = new ComputeBuffer(particles.Count, Marshal.SizeOf(typeof(GPUParticle)));
-                ParticleBuffer.SetData(particles);
-                
             }
+            updateShader.SetBuffer(kernel, "_Particles", buffer);
+            updateShader.Dispatch(kernel, buffer.count / _Thread + 1, 1, 1);
         }
 
-        private Mesh Build(int count)
+        Mesh Build(int count)
         {
             Mesh particleMesh = new Mesh();
             particleMesh.name = count.ToString();
@@ -188,5 +171,24 @@ namespace Kasug
 
             return particleMesh;
         }
+
+        void CheckInit()
+        {
+            if (buffer == null)
+            {
+                buffer = new ComputeBuffer(particles.Length, Marshal.SizeOf(typeof(GPUParticle)));
+                buffer.SetData(particles);
+            }
+        }
+
+        void OnDisable()
+        {
+            if (buffer != null)
+            {
+                buffer.Release();
+                buffer = null;
+            }
+        }
+
     }
 }

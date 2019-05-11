@@ -33,7 +33,7 @@ namespace Kasug
         public float intensity = 17.5f;
 
         public bool automatic = false;
-        [Range(1f, 10f)] public float automaticDuration = 3f;
+        [Range(0.1f, 10f)] public float automaticDuration = 3f;
 
         ComputeBuffer explosionBuffer;
 
@@ -48,7 +48,7 @@ namespace Kasug
 
             while (true)
             {
-                yield return new WaitForSeconds(Mathf.Max(1f, automaticDuration));
+                yield return new WaitForSeconds(automaticDuration);
                 Explode();
             }
         }
@@ -91,7 +91,7 @@ namespace Kasug
             if (explosionBuffer == null)
             {
                 explosionBuffer = new ComputeBuffer(32, Marshal.SizeOf(typeof(Explosion)));
-                explosionBuffer.SetData(explosions.ToArray());
+                explosionBuffer.SetData(explosions);
             }
         }
 
