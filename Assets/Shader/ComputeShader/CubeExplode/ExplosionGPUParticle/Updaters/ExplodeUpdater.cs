@@ -26,14 +26,16 @@ namespace Kasug
             }
         };
 
-        [SerializeField] List<Explosion> explosions;
+        [SerializeField]
+        List<Explosion> explosions;
 
         public float radius = 1f;
         public float size = 0.5f;
         public float intensity = 17.5f;
 
         public bool automatic = false;
-        [Range(0.1f, 10f)] public float automaticDuration = 3f;
+        [Range(0.01f, 1f)]
+        public float automaticDuration = 0.1f;
 
         ComputeBuffer explosionBuffer;
 

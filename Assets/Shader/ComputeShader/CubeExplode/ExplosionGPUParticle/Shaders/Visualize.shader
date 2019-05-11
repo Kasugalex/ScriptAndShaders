@@ -1,4 +1,4 @@
-﻿Shader "mattatz/GPUParticleSystem/Visualize" {
+﻿Shader "Kasug/GPUParticleSystem/Visualize" {
 
 	Properties {
 		_MainTex ("Base (RGB)", 2D) = "black" {}

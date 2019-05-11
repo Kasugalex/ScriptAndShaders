@@ -51,7 +51,7 @@ namespace Kasug
             }
         }
         public List<GPUParticleUpdater> updaters;
-
+        [SerializeField] Shader shader;
         [SerializeField] Color color = Color.white;
         [SerializeField] int vertexCount = 30000;
         [SerializeField] ComputeShader updateShader;
@@ -62,11 +62,13 @@ namespace Kasug
         GPUParticle[] particles;
         ComputeBuffer buffer;
         MaterialPropertyBlock _block;
+        Transform _trans;
 
         const int _Thread = 8;
 
         protected void Start()
         {
+            _trans = transform;
             var sideCount = Mathf.FloorToInt(Mathf.Pow(vertexCount, 1f / 3f));
             var count = sideCount * sideCount * sideCount;
             var dsideCount = sideCount * sideCount;
@@ -95,11 +97,13 @@ namespace Kasug
             mesh = Build(sideCount);
         }
 
+        private int colorH = 0;
         void Update()
         {
             CheckInit();
 
-            updaters.ForEach(updater => {
+            updaters.ForEach(updater =>
+            {
                 if (updater.gameObject.activeSelf)
                 {
                     updater.Dispatch(this);
@@ -114,8 +118,14 @@ namespace Kasug
             Dispatch("Update");
 
             block.SetBuffer("_Particles", buffer);
+
+            colorH = colorH < 360 ? ++colorH : 0;
+
+            color = HSVToRGB.HSV2RGB(colorH, 200, 200);
+
             block.SetColor("_Color", color);
-            Graphics.DrawMesh(mesh, transform.localToWorldMatrix, particleDisplayMat, 0, null, 0, block);
+
+            Graphics.DrawMesh(mesh, _trans.localToWorldMatrix, particleDisplayMat, 0, null, 0, block);
         }
 
         void Dispatch(string key)
@@ -143,7 +153,7 @@ namespace Kasug
             var vertices = new Vector3[tcount];
             var uvs = new Vector2[tcount];
             var indices = new int[tcount];
-
+            /*
             for (int x = 0; x < count; x++)
             {
                 var xoffset = x * dcount;
@@ -157,6 +167,21 @@ namespace Kasug
                         uvs[index] = new Vector2(x * scale + z * dscale, y * scale);
                         indices[index] = index;
                     }
+                }
+            }
+            */
+
+            for (int x = 0; x < count; x++)
+            {
+                var xoffset = x * dcount;
+                for (int y = 0; y < count; y++)
+                {
+                    var yoffset = y * count;
+
+                    var index = xoffset + yoffset ;
+                    vertices[index] = new Vector3(x, y, 0) * scale + offset;
+                    uvs[index] = new Vector2(x * scale, y * scale);
+                    indices[index] = index;
                 }
             }
 
