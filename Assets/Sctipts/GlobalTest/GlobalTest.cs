@@ -10,7 +10,7 @@ public class GlobalTest : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        FindWithID();
+
     }
 
     void EqualTest()
