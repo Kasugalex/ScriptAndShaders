@@ -24,8 +24,8 @@ RWTexture2D<float4> Result;
 
 float3 Wave(float3 p, int idx, uint3 id) {
 	p.x = cos(cBuffer[0].t * 10 + id.x);
-	p.y = sin(cBuffer[0].t * 10 + id.y  + id.x  );
-	p.z = sin(cBuffer[0].t * 10 + offsets[idx].offset * 10);
+	p.y = sin(cBuffer[0].t * 10 + id.y);
+	p.z = sin(cBuffer[0].t * 10);
 	return p;
 }
 
@@ -39,16 +39,16 @@ float3 SetColor(float3 p, uint3 id) {
 [numthreads(thread_group_size_x, thread_group_size_y,1)]
 void CSMain(uint3 id : SV_DispatchThreadID)
 {
-	//int idx = id.x + id.y * thread_group_size_x * 32;
-	//float spacing = 1;
-	//float3 pos = float3(id.x * spacing,id.y * spacing,id.z * spacing);
-	//pos = Wave(pos,idx,id);
-	//color[idx] = SetColor(pos,id);
-
-	int idx = id.x + id.z;
-	float3 pos = float3(id.x,id.y,id.z);
+	int idx = id.x + id.y * thread_group_size_x * 32;
+	float spacing = 1;
+	float3 pos = float3(id.x * spacing,id.y * spacing,id.z * spacing);
 	pos = Wave(pos,idx,id);
 	color[idx] = SetColor(pos,id);
+
+	//int idx = id.x + id.z;
+	//float3 pos = float3(id.x,id.y,id.z);
+	//pos = Wave(pos,idx,id);
+	//color[idx] = SetColor(pos,id);
 
 	output[idx].pos = pos;
 }

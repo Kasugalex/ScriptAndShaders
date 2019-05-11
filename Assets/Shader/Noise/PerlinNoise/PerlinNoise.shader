@@ -14,7 +14,7 @@
 			#pragma fragment frag
 			
 			#include "UnityCG.cginc"
-
+			#include "Assets/CommonResources/Shaders/Noise/ClassicNoise2D.cginc"
 			struct appdata
 			{
 				float4 vertex : POSITION;
@@ -29,7 +29,7 @@
 
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
-
+			/*//实现一
 			float2 hash22(float2 p)
 			{
 				p = float2 (dot(p, float2(127.1, 311.7)), dot(p, float2(269.5, 183.3)));
@@ -47,7 +47,7 @@
 					lerp(dot(hash22(pi + float2(0.0, 1.0)), pf - float2(0.0, 1.0)),
 						dot(hash22(pi + float2(1.0, 1.0)), pf - float2(1.0, 1.0)), w.x),
 					w.y);
-			}
+			}*/
 			
 			v2f vert (appdata v)
 			{
@@ -60,7 +60,7 @@
 			fixed4 frag (v2f i) : SV_Target
 			{
 
-				float4 col = noise(fixed2(i.uv.x + _Time.x * 10,i.uv.y));
+				float4 col = cnoise(fixed2(i.uv.x ,i.uv.y));
 
 				return col;
 			}
