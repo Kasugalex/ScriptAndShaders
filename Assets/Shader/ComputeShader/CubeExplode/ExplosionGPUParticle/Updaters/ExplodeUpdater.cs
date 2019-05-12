@@ -59,6 +59,14 @@ namespace Kasug
         {
             CheckInit();
             base.Update();
+
+            if (Input.GetMouseButtonDown(0))
+            {
+
+                if (show)
+                    StartCoroutine(Repeater());
+                show = false;
+            }
         }
 
         public override void Dispatch(GPUParticleSystem system)
@@ -112,6 +120,16 @@ namespace Kasug
                 explosionBuffer.Release();
                 explosionBuffer = null;
             }
+        }
+
+        bool show = true;
+        private void OnGUI()
+        {
+            if (!show) return;
+            GUIStyle style = new GUIStyle();
+            style.fontSize = 40;
+            style.normal.textColor = Color.white;
+            GUI.TextArea(new Rect((Screen.width >> 1) - 130, 100, 500, 200), "按下左键爆炸", style);
         }
 
     }
