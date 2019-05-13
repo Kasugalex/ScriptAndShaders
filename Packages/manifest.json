@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.unity.2d.ik": "1.0.8-preview.1",
     "com.unity.burst": "0.2.4-preview.24",
     "com.unity.entities": "0.0.12-preview.24",
     "com.unity.jobs": "0.0.7-preview.6",

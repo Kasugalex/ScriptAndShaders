@@ -28,19 +28,24 @@ public class InstantiateObjectTest : MonoBehaviour
         {
             var archeType = entityManager.CreateArchetype(typeof(GravityComponentData), typeof(Position), typeof(RenderMesh));
             entityManager.CreateEntity(archeType, entities);
+           
         }
 
         var meshRenderer = new RenderMesh()
         {
             mesh = mesh,
-            material = material
+            material = material,
+            subMesh = 0,
+            layer = 0,
+            castShadows = UnityEngine.Rendering.ShadowCastingMode.On,
+            receiveShadows = true
         };
 
         for (int i = 0; i < entities.Length; i++)
         {
             Vector3 pos = UnityEngine.Random.insideUnitSphere * 40;
 
-            pos.y = GravityJobSystem.Top;
+            pos.y = GravitySystem.Top;
             var entity = entities[i];
             entityManager.SetComponentData(entity, new Position { Value = pos });
             entityManager.SetComponentData(entity, new GravityComponentData { mass = Random.Range(0.5f, 3f), delay = 0.02f * i });

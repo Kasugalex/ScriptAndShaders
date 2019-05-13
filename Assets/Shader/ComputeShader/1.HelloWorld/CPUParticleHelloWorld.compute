@@ -1,0 +1,20 @@
+﻿#pragma kernel CSMain
+
+struct PositionStruct {
+	float3 pos;
+};
+
+struct CBufferStruct {
+	float t;
+};
+
+RWStructuredBuffer<PositionStruct> output;
+RWStructuredBuffer<CBufferStruct>  cBuffer;
+RWTexture2D<float4> Result;
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+	
+
+}
