@@ -35,7 +35,7 @@ public class CPUParticleHelloWorld : MonoBehaviour
         material.SetPass(0);
         material.SetBuffer("pointsBuffer", outputBuffer);
         material.SetBuffer("colorBuffer", colorBuffer);
-        Graphics.DrawProcedural(MeshTopology.Points, vertexCount);
+        Graphics.DrawProcedural(MeshTopology.Lines, vertexCount);
     }
 
     private void Dispatch()
@@ -46,6 +46,7 @@ public class CPUParticleHelloWorld : MonoBehaviour
         computeShader.SetBuffer(kernel, "output", outputBuffer);
         computeShader.SetBuffer(kernel, "color", colorBuffer);
         computeShader.Dispatch(kernel, 64, 64, 1);
+
     }
 
     private void CreateBuffers()

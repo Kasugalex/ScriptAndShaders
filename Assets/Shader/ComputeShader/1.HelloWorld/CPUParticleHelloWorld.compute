@@ -13,17 +13,19 @@ RWStructuredBuffer<CBufferStruct>  cBuffer;
 RWStructuredBuffer<float3>  color;
 RWTexture2D<float4> Result;
 
+float split;
+
 float3 Wave(float3 p, uint3 id) {
 	p.x = id.x;
-	p.y = id.y;
-	p.z = abs(sin(cBuffer[0].t + id.x + id.y));
+	p.y = sin(cBuffer[0].t * 0.1  + id.y) * 10;
+	p.z = id.x;
 	return p;
 }
 
 float3 SetColor(float3 p, uint3 id) {
-	//p.x = id.x / 20;
-	p.y = id.y / 20;
-	//p.z = id.z / 20 * cBuffer[0].t;
+	p.x = abs(sin(cBuffer[0].t + id.x));
+	p.y = abs(sin(cBuffer[0].t + id.y));
+	p.z = split + id.z;
 	return p;
 }
 
