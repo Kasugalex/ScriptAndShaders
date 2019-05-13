@@ -10,11 +10,29 @@ struct CBufferStruct {
 
 RWStructuredBuffer<PositionStruct> output;
 RWStructuredBuffer<CBufferStruct>  cBuffer;
+RWStructuredBuffer<float3>  color;
 RWTexture2D<float4> Result;
+
+float3 Wave(float3 p, uint3 id) {
+	p.x = id.x;
+	p.y = id.y;
+	p.z = abs(sin(cBuffer[0].t + id.x + id.y));
+	return p;
+}
+
+float3 SetColor(float3 p, uint3 id) {
+	//p.x = id.x / 20;
+	p.y = id.y / 20;
+	//p.z = id.z / 20 * cBuffer[0].t;
+	return p;
+}
 
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
-	
-
+	int idx = id.x + id.y * 8 * 128;
+	float3 pos = float3(id.x, id.y, id.z);
+	pos = Wave(pos, id);
+	color[idx] = SetColor(pos, id);
+	output[idx].pos = pos;
 }

@@ -17,11 +17,12 @@
 			#include "UnityCG.cginc"
 
 			StructuredBuffer<float3> pointsBuffer;
+			StructuredBuffer<float3> colorBuffer;
 
             struct v2f
             {
                 float4 vertex : SV_POSITION;
-				fixed4 color : COLOR;
+				fixed3 color : COLOR;
             };
 
             sampler2D _MainTex;
@@ -31,13 +32,14 @@
             {
                 v2f o;
 				float3 pos = pointsBuffer[id];
+				o.color = colorBuffer[id];
 				o.vertex = mul(UNITY_MATRIX_VP, float4(pos, 1));
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                return i.color;
+                return fixed4(i.color,1);
             }
             ENDCG
         }
