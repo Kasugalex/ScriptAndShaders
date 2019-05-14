@@ -14,6 +14,22 @@ public class MyPipeline : RenderPipeline
 
     private Material errorMaterial;
 
+    private DrawRendererFlags drawFlags;
+
+    public MyPipeline(bool dynamicBatching,bool instance)
+    {
+        if (dynamicBatching)
+        {
+            drawFlags = DrawRendererFlags.EnableDynamicBatching;
+        }
+        if(instance)
+        {
+            drawFlags |= DrawRendererFlags.EnableInstancing;
+        }
+    }
+
+    public MyPipeline() { }
+
     protected virtual IRenderPipeline InternalCreatePipeline()
     {
         return new MyPipeline();
@@ -59,6 +75,8 @@ public class MyPipeline : RenderPipeline
         //Drawing
         var drawSettings = new DrawRendererSettings(camera, new ShaderPassName("SRPDefaultUnlit"));//in here, we must create a new Shader named SRPDefaultUnlit
         drawSettings.sorting.flags = SortFlags.CommonOpaque;
+        //open the dynamic batching
+        drawSettings.flags = drawFlags;
         var filterSettings = new FilterRenderersSettings(true);
         //set the renderqueue
 
