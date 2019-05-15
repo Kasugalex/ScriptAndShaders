@@ -35,14 +35,14 @@ float3 HalfLambertDiffuseLight(int index, float3 normal, float3 worldPos) {
 	float3 spotDirection = _VisibleLightSpotDirections[index].xyz;
 	//lightPositionOrDirection.w -- 1 is position and 0 is direction
 	float3 lightVector = lightPositionOrDirection.xyz - worldPos * lightPositionOrDirection.w;
-	float3 lightDirection = lightPositionOrDirection.xyz;
-	float diffuse = 0.5 * dot(normal, lightDirection) + 0.5;
+	float3 lightDirection = normalize(lightVector);
+	float diffuse = saturate(dot(normal, lightDirection));
 	float lightIndensitySqr = dot(lightVector, lightVector);
 	//Light Attenuation
 	float rangeFade = lightIndensitySqr * lightAttenuation.x;
 	rangeFade = saturate(1.0 - rangeFade * rangeFade);
 	rangeFade *= rangeFade;
-
+	//Spot light
 	float spotFade = dot(spotDirection, lightDirection);
 	spotFade = saturate(spotFade * lightAttenuation.z + lightAttenuation.w);
 	spotFade *= spotFade;

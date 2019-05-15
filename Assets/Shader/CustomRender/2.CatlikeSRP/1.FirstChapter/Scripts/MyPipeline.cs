@@ -191,6 +191,7 @@ public class MyPipeline : RenderPipeline
                     v.y = -v.y;
                     v.z = -v.z;
                     visibleLightSpotDirections[i] = v;
+
                     //Unity's spotlight only allows to set the outer angle. So I need to caculate inner angle
                     float outerRad = Mathf.Deg2Rad * 0.5f * light.spotAngle;
                     float outerCos = Mathf.Cos(outerRad);
