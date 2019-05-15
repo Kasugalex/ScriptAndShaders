@@ -23,13 +23,27 @@ CBUFFER_END
 
 CBUFFER_START(_LightBuffer)
 float4 _VisibleLightColors[MAX_VISIBLE_LIGHTS];
-float4 _VisibleLightDirections[MAX_VISIBLE_LIGHTS];
+float4 _VisibleLightDirectionsOrPositions[MAX_VISIBLE_LIGHTS];
+float4 _VisibleLightAttenuations[MAX_VISIBLE_LIGHTS];
 CBUFFER_END
 
-float3 HalfLambertDiffuseLight(int index, float3 normal) {
+float3 HalfLambertDiffuseLight(int index, float3 normal, float3 worldPos) {
 	float3 lightColor = _VisibleLightColors[index].rgb;
-	float3 lightDirection = _VisibleLightDirections[index].xyz;
+	float4 lightPositionOrDirection = _VisibleLightDirectionsOrPositions[index];
+	float4 lightAttenuation = _VisibleLightAttenuations[index];
+	//lightPositionOrDirection.w -- 1 is position and 0 is direction
+	float3 lightVector = lightPositionOrDirection.xyz - worldPos * lightPositionOrDirection.w;
+	float3 lightDirection = lightPositionOrDirection.xyz;
 	float diffuse = 0.5 * dot(normal, lightDirection) + 0.5;
+	float lightIndensitySqr = dot(lightVector, lightVector);
+	//Light Attenuation
+	float rangeFade = lightIndensitySqr * lightAttenuation.x;
+	rangeFade = saturate(1.0 - rangeFade * rangeFade);
+	rangeFade *= rangeFade;
+
+	//Distance Attenuation--  this relation is i / d^2  (i is the light's intensity ,d is distance)
+	float distanceSqr = max(lightIndensitySqr, 0.00001);
+	diffuse *= rangeFade / distanceSqr;
 	return diffuse * lightColor;
 }
 
@@ -58,6 +72,7 @@ struct VertexInput {
 struct VertexOutput {
 	float4 clipPos :SV_POSITION;
 	float3 normal:NORMAL;
+	float3 worldPos:TEXCOORD1;
 	UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
@@ -70,6 +85,7 @@ VertexOutput LitPassVertex(VertexInput input) {
 	float4 worldPos = mul(UNITY_MATRIX_M, float4(input.pos.xyz, 1.0));
 	output.clipPos = mul(unity_MatrixVP, worldPos);
 	output.normal = mul((float3x3)UNITY_MATRIX_M,input.normal);
+	output.worldPos = worldPos.xyz;
 	return output;
 }
 
@@ -81,7 +97,7 @@ float4 LitPassFragment(VertexOutput input) : SV_Target{
 	float3 diffuseLight = 0;
 	for (int i = 0; i < MAX_VISIBLE_LIGHTS; i++)
 	{
-		diffuseLight += HalfLambertDiffuseLight(i,input.normal);
+		diffuseLight += HalfLambertDiffuseLight(i, input.normal, input.worldPos);
 	}
 	//float3 diffuseLight = saturate(dot(input.normal,float3(0,1,0)));
 	//float3 diffuseLight = 0.5 * dot(input.normal,float3(-1,1,0)) + 0.5;

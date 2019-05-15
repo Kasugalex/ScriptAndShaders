@@ -18,9 +18,12 @@ public class MyPipeline : RenderPipeline
 
     private const int maxVisibleLights = 4;
     private Vector4[] visibleLightColors = new Vector4[maxVisibleLights];
-    private Vector4[] visibleLightDirections = new Vector4[maxVisibleLights];
+    private Vector4[] visibleLightDirectionsOrPositions = new Vector4[maxVisibleLights];
+    private Vector4[] visibleLightAttenuations = new Vector4[maxVisibleLights];
+
     private static int visibleLightColorsId = Shader.PropertyToID("_VisibleLightColors");
-    private static int visibleLightDirectionsId = Shader.PropertyToID("_VisibleLightDirections");
+    private static int visibleLightDirectionsId = Shader.PropertyToID("_VisibleLightDirectionsOrPositions");
+    private static int visibleLightAttenuationsId = Shader.PropertyToID("_VisibleLightAttenuations");
 
 
     public MyPipeline(bool dynamicBatching,bool instance)
@@ -80,19 +83,21 @@ public class MyPipeline : RenderPipeline
         cameraBuffer.ClearRenderTarget((clearFlags & CameraClearFlags.Depth) != 0, (clearFlags & CameraClearFlags.Color) != 0, camera.backgroundColor);
         ConfigureLights();
         cameraBuffer.BeginSample("Render Camera");
+
         cameraBuffer.SetGlobalVectorArray(visibleLightColorsId, visibleLightColors);
-        cameraBuffer.SetGlobalVectorArray(visibleLightDirectionsId, visibleLightDirections);
+        cameraBuffer.SetGlobalVectorArray(visibleLightDirectionsId, visibleLightDirectionsOrPositions);
+        cameraBuffer.SetGlobalVectorArray(visibleLightAttenuationsId, visibleLightAttenuations);
+
         renderContext.ExecuteCommandBuffer(cameraBuffer);
         cameraBuffer.Clear();
 
         //Drawing
         var drawSettings = new DrawRendererSettings(camera, new ShaderPassName("SRPDefaultUnlit"));//in here, we must create a new Shader named SRPDefaultUnlit
+        //set the renderqueue
         drawSettings.sorting.flags = SortFlags.CommonOpaque;
-        //open the dynamic batching
         drawSettings.flags = drawFlags;
         var filterSettings = new FilterRenderersSettings(true);
-        //set the renderqueue
-
+ 
         // Draw Opaque renderers before the skybox to prevent overdraw
         // RenderQueueRange.opaque, which covers the render queues from 0 up to and including 2500.
         filterSettings.renderQueueRange = RenderQueueRange.opaque;
@@ -157,12 +162,26 @@ public class MyPipeline : RenderPipeline
             VisibleLight light = cull.visibleLights[i];
             //use finalColor 
             visibleLightColors[i] = light.finalColor;
-            //The third column of that matrix defines the transformed local Z direction vector, which we can get via the Matrix4x4.GetColumn method, with index 2 as an argument.
-            Vector4 v = light.localToWorld.GetColumn(2);
-            v.x = -v.x;
-            v.y = -v.y;
-            v.z = -v.z;
-            visibleLightDirections[i] = v;
+
+            Vector4 attenuation = Vector4.zero;
+    
+            if (light.lightType == LightType.Directional)
+            { 
+                //The third column of that matrix defines the transformed local Z direction vector, which we can get via the Matrix4x4.GetColumn method, with index 2 as an argument.
+                Vector4 v = light.localToWorld.GetColumn(2);
+                v.x = -v.x;
+                v.y = -v.y;
+                v.z = -v.z;
+                visibleLightDirectionsOrPositions[i] = v;
+            }
+            else
+            {
+                //The fourth column of that matrix stores the light's world position
+                visibleLightDirectionsOrPositions[i] = light.localToWorld.GetColumn(3);
+                attenuation.x = 1f / Mathf.Max(light.range * light.range, 0.00001f);
+            }
+
+            visibleLightAttenuations[i] = attenuation;
         }
         //when the amount of visible lights decreases. They remain visible, because we don't reset their data. 
         for (; i < maxVisibleLights; i++)
