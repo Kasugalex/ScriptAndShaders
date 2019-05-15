@@ -1,4 +1,4 @@
-﻿Shader "Kasug/My Pipeline/Unlit"
+﻿Shader "Kasug/My Pipeline/Lit"
 {
     Properties
     {
@@ -16,9 +16,9 @@
 			#pragma multi_compile_instancing
 			//support non-uniform scaling
 			#pragma instancing_options assumeuniformscaling
-			#include "../ShaderLibrary/Unlit.hlsl"	
-			#pragma vertex UnlitPassVertex
-			#pragma fragment UnlitPassFragment
+			#include "../ShaderLibrary/Lit.hlsl"	
+			#pragma vertex LitPassVertex
+			#pragma fragment LitPassFragment
 
 
 			ENDHLSL

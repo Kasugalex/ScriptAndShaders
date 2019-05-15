@@ -16,8 +16,18 @@ public class MyPipeline : RenderPipeline
 
     private DrawRendererFlags drawFlags;
 
+    private const int maxVisibleLights = 4;
+    private Vector4[] visibleLightColors = new Vector4[maxVisibleLights];
+    private Vector4[] visibleLightDirections = new Vector4[maxVisibleLights];
+    private static int visibleLightColorsId = Shader.PropertyToID("_VisibleLightColors");
+    private static int visibleLightDirectionsId = Shader.PropertyToID("_VisibleLightDirections");
+
+
     public MyPipeline(bool dynamicBatching,bool instance)
     {
+        //By default Unity considers the light's intensity to be defined in gamma space, even through we're working in linear space
+        GraphicsSettings.lightsUseLinearIntensity = true;
+
         if (dynamicBatching)
         {
             drawFlags = DrawRendererFlags.EnableDynamicBatching;
@@ -68,7 +78,10 @@ public class MyPipeline : RenderPipeline
 
         CameraClearFlags clearFlags = camera.clearFlags;
         cameraBuffer.ClearRenderTarget((clearFlags & CameraClearFlags.Depth) != 0, (clearFlags & CameraClearFlags.Color) != 0, camera.backgroundColor);
+        ConfigureLights();
         cameraBuffer.BeginSample("Render Camera");
+        cameraBuffer.SetGlobalVectorArray(visibleLightColorsId, visibleLightColors);
+        cameraBuffer.SetGlobalVectorArray(visibleLightDirectionsId, visibleLightDirections);
         renderContext.ExecuteCommandBuffer(cameraBuffer);
         cameraBuffer.Clear();
 
@@ -131,5 +144,30 @@ public class MyPipeline : RenderPipeline
         var filterSettings = new FilterRenderersSettings(true);
 
         renderContext.DrawRenderers(cull.visibleRenderers, ref drawSettings, filterSettings);
+    }
+
+    //Figures out which lights are visible
+    private void ConfigureLights()
+    {
+        int i = 0;
+        for (; i < cull.visibleLights.Count; i++)
+        {
+            //prevent the light count exceed maxVisibleLights
+            if (i == maxVisibleLights) break;
+            VisibleLight light = cull.visibleLights[i];
+            //use finalColor 
+            visibleLightColors[i] = light.finalColor;
+            //The third column of that matrix defines the transformed local Z direction vector, which we can get via the Matrix4x4.GetColumn method, with index 2 as an argument.
+            Vector4 v = light.localToWorld.GetColumn(2);
+            v.x = -v.x;
+            v.y = -v.y;
+            v.z = -v.z;
+            visibleLightDirections[i] = v;
+        }
+        //when the amount of visible lights decreases. They remain visible, because we don't reset their data. 
+        for (; i < maxVisibleLights; i++)
+        {
+            visibleLightColors[i] = Color.clear;
+        }
     }
 }
