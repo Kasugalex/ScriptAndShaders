@@ -17,13 +17,15 @@ public class MyPipeline : RenderPipeline
     private DrawRendererFlags drawFlags;
 
     private const int maxVisibleLights = 4;
-    private Vector4[] visibleLightColors = new Vector4[maxVisibleLights];
-    private Vector4[] visibleLightDirectionsOrPositions = new Vector4[maxVisibleLights];
-    private Vector4[] visibleLightAttenuations = new Vector4[maxVisibleLights];
+    private Vector4[] visibleLightColors                        =   new Vector4[maxVisibleLights];
+    private Vector4[] visibleLightDirectionsOrPositions         =   new Vector4[maxVisibleLights];
+    private Vector4[] visibleLightAttenuations                  =   new Vector4[maxVisibleLights];
+    private Vector4[] visibleLightSpotDirections                =   new Vector4[maxVisibleLights];
 
-    private static int visibleLightColorsId = Shader.PropertyToID("_VisibleLightColors");
-    private static int visibleLightDirectionsId = Shader.PropertyToID("_VisibleLightDirectionsOrPositions");
-    private static int visibleLightAttenuationsId = Shader.PropertyToID("_VisibleLightAttenuations");
+    private static int visibleLightColorsId                     =   Shader.PropertyToID("_VisibleLightColors");
+    private static int visibleLightDirectionsId                 =   Shader.PropertyToID("_VisibleLightDirectionsOrPositions");
+    private static int visibleLightAttenuationsId               =   Shader.PropertyToID("_VisibleLightAttenuations");
+    private static int visibleLightSpotDirectionsId             =   Shader.PropertyToID("_VisibleLightSpotDirections");
 
 
     public MyPipeline(bool dynamicBatching,bool instance)
@@ -84,9 +86,10 @@ public class MyPipeline : RenderPipeline
         ConfigureLights();
         cameraBuffer.BeginSample("Render Camera");
 
-        cameraBuffer.SetGlobalVectorArray(visibleLightColorsId, visibleLightColors);
-        cameraBuffer.SetGlobalVectorArray(visibleLightDirectionsId, visibleLightDirectionsOrPositions);
-        cameraBuffer.SetGlobalVectorArray(visibleLightAttenuationsId, visibleLightAttenuations);
+        cameraBuffer.SetGlobalVectorArray(visibleLightColorsId,         visibleLightColors);
+        cameraBuffer.SetGlobalVectorArray(visibleLightDirectionsId,     visibleLightDirectionsOrPositions);
+        cameraBuffer.SetGlobalVectorArray(visibleLightAttenuationsId,   visibleLightAttenuations);
+        cameraBuffer.SetGlobalVectorArray(visibleLightSpotDirectionsId, visibleLightSpotDirections);
 
         renderContext.ExecuteCommandBuffer(cameraBuffer);
         cameraBuffer.Clear();
@@ -164,7 +167,8 @@ public class MyPipeline : RenderPipeline
             visibleLightColors[i] = light.finalColor;
 
             Vector4 attenuation = Vector4.zero;
-    
+            //keep spot fade calcutation from affecting the other light types
+            attenuation.w = 1;
             if (light.lightType == LightType.Directional)
             { 
                 //The third column of that matrix defines the transformed local Z direction vector, which we can get via the Matrix4x4.GetColumn method, with index 2 as an argument.
@@ -179,6 +183,25 @@ public class MyPipeline : RenderPipeline
                 //The fourth column of that matrix stores the light's world position
                 visibleLightDirectionsOrPositions[i] = light.localToWorld.GetColumn(3);
                 attenuation.x = 1f / Mathf.Max(light.range * light.range, 0.00001f);
+
+                if(light.lightType == LightType.Spot)
+                {
+                    Vector4 v = light.localToWorld.GetColumn(2);
+                    v.x = -v.x;
+                    v.y = -v.y;
+                    v.z = -v.z;
+                    visibleLightSpotDirections[i] = v;
+                    //Unity's spotlight only allows to set the outer angle. So I need to caculate inner angle
+                    float outerRad = Mathf.Deg2Rad * 0.5f * light.spotAngle;
+                    float outerCos = Mathf.Cos(outerRad);
+                    //LWRP define the inner angle with the relationship tan(ri) = 46/64 * tan(ro) ,where ri and ro are half the inner and outer spot angles in randians
+                    float outerTan = Mathf.Tan(outerRad);
+                    float innerCos = Mathf.Cos(Mathf.Atan((46f / 64f) * outerTan));
+                    float angleRange = Mathf.Max(innerCos - outerCos, 0.001f);
+                    //store them in the last tow components of the attenuation data vector
+                    attenuation.z = 1f / angleRange;
+                    attenuation.w = -outerCos * attenuation.z;
+                }
             }
 
             visibleLightAttenuations[i] = attenuation;

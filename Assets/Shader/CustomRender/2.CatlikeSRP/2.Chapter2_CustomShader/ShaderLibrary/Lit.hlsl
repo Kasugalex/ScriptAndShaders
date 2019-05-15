@@ -25,12 +25,14 @@ CBUFFER_START(_LightBuffer)
 float4 _VisibleLightColors[MAX_VISIBLE_LIGHTS];
 float4 _VisibleLightDirectionsOrPositions[MAX_VISIBLE_LIGHTS];
 float4 _VisibleLightAttenuations[MAX_VISIBLE_LIGHTS];
+float4 _VisibleLightSpotDirections[MAX_VISIBLE_LIGHTS];
 CBUFFER_END
 
 float3 HalfLambertDiffuseLight(int index, float3 normal, float3 worldPos) {
 	float3 lightColor = _VisibleLightColors[index].rgb;
 	float4 lightPositionOrDirection = _VisibleLightDirectionsOrPositions[index];
 	float4 lightAttenuation = _VisibleLightAttenuations[index];
+	float3 spotDirection = _VisibleLightSpotDirections[index].xyz;
 	//lightPositionOrDirection.w -- 1 is position and 0 is direction
 	float3 lightVector = lightPositionOrDirection.xyz - worldPos * lightPositionOrDirection.w;
 	float3 lightDirection = lightPositionOrDirection.xyz;
@@ -41,9 +43,13 @@ float3 HalfLambertDiffuseLight(int index, float3 normal, float3 worldPos) {
 	rangeFade = saturate(1.0 - rangeFade * rangeFade);
 	rangeFade *= rangeFade;
 
+	float spotFade = dot(spotDirection, lightDirection);
+	spotFade = saturate(spotFade * lightAttenuation.z + lightAttenuation.w);
+	spotFade *= spotFade;
+
 	//Distance Attenuation--  this relation is i / d^2  (i is the light's intensity ,d is distance)
 	float distanceSqr = max(lightIndensitySqr, 0.00001);
-	diffuse *= rangeFade / distanceSqr;
+	diffuse *= spotFade *  rangeFade / distanceSqr;
 	return diffuse * lightColor;
 }
 
