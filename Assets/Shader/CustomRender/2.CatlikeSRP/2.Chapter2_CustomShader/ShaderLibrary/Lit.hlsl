@@ -28,7 +28,7 @@ float4 _VisibleLightAttenuations[MAX_VISIBLE_LIGHTS];
 float4 _VisibleLightSpotDirections[MAX_VISIBLE_LIGHTS];
 CBUFFER_END
 
-float3 HalfLambertDiffuseLight(int index, float3 normal, float3 worldPos) {
+float3 DiffuseLight(int index, float3 normal, float3 worldPos) {
 	float3 lightColor = _VisibleLightColors[index].rgb;
 	float4 lightPositionOrDirection = _VisibleLightDirectionsOrPositions[index];
 	float4 lightAttenuation = _VisibleLightAttenuations[index];
@@ -103,7 +103,7 @@ float4 LitPassFragment(VertexOutput input) : SV_Target{
 	float3 diffuseLight = 0;
 	for (int i = 0; i < MAX_VISIBLE_LIGHTS; i++)
 	{
-		diffuseLight += HalfLambertDiffuseLight(i, input.normal, input.worldPos);
+		diffuseLight += DiffuseLight(i, input.normal, input.worldPos);
 	}
 	//float3 diffuseLight = saturate(dot(input.normal,float3(0,1,0)));
 	//float3 diffuseLight = 0.5 * dot(input.normal,float3(-1,1,0)) + 0.5;
