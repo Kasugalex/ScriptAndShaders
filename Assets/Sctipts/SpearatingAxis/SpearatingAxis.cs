@@ -33,8 +33,6 @@ public class SpearatingAxis : MonoBehaviour {
             if (currentSelect == null)
                 return;
 
-            DetecteCollision(currentSelect);
-
             Vector3 mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
             if (lastMousePosition != mousePos)
             {
