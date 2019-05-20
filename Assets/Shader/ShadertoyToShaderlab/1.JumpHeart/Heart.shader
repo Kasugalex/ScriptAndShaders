@@ -72,7 +72,7 @@ Shader "Shadertoy/Heart"
 		p *= vec2(0.5, 1.5) + ss * vec2(0.5, -0.5);
 
 		// shape
-		float a = atan(p.x, p.y) / 3.141593;
+		float a = atan2(p.x, p.y) / 3.141593;
 		float r = length(p);
 		float h = abs(a);
 		float d = (13.0*h - 22.0*h*h + 10.0*h*h*h) / (6.0 - 5.0*h);
