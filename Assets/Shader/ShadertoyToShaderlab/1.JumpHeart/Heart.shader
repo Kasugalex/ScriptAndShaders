@@ -1,5 +1,5 @@
-﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
+﻿
+//https://blog.csdn.net/candycat1992/article/details/44040273
 Shader "Shadertoy/Heart"
 {
 	Properties{
