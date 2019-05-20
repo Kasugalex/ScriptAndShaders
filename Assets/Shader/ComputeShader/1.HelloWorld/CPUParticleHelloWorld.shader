@@ -1,4 +1,4 @@
-﻿Shader "Unlit/CPUParticleHelloWorld"
+﻿Shader "Kasug/GPUParticle/GPUParticleHelloWorld"
 {
     Properties
     {

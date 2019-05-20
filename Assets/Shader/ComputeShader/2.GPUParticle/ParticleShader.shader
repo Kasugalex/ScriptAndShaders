@@ -1,4 +1,4 @@
-﻿Shader "Unlit/ParticleShader"
+﻿Shader "Kasug/GPUParticle/ParticleShader"
 {
 	Properties
 	{

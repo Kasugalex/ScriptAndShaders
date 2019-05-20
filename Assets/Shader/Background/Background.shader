@@ -1,4 +1,4 @@
-﻿Shader "Unlit/Background"
+﻿Shader "Kasug/Background"
 {
 	Properties
 	{
