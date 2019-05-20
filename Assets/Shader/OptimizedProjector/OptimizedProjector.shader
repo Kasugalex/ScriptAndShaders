@@ -1,58 +1,65 @@
-﻿Shader "Kasug/OptimizedProjector"
+﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+
+Shader "Kasug/OptimizedProjector"
 {
-    Properties
-    {
-        _MainTex ("Texture", 2D) = "white" {}
-    }
-    SubShader
-    {
-        Tags { "RenderType"="Opaque" }
-        LOD 100
+	Properties{
+		_ShadowTex("Cookie", 2D) = "gray" {}
+	}
+	Subshader{
+		Tags {"Queue" = "Transparent"}
+		Pass {
+			blend srcAlpha oneMinusSrcAlpha
+			cull back
+			CGPROGRAM
+			#pragma vertex vert
+			#pragma fragment frag
+			#pragma multi_compile_fog
+			#include "UnityCG.cginc"
 
-        Pass
-        {
-            CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-            // make fog work
-            #pragma multi_compile_fog
+			struct v2f {
+				float4 uvShadow : TEXCOORD0;
+				float4 pos : SV_POSITION;
+				float3 worldNormal:NORMAL;
+				float3 worldPos :TEXCOORD1;
+			};
 
-            #include "UnityCG.cginc"
+			float4x4 unity_Projector;
+			float4x4 unity_ProjectorClip;
 
-            struct appdata
-            {
-                float4 vertex : POSITION;
-                float2 uv : TEXCOORD0;
-            };
+			v2f vert(appdata_full v)
+			{
+				v2f o;
+				o.pos = UnityObjectToClipPos(v.vertex);
+				o.uvShadow = mul(unity_Projector, v.vertex);
+				o.worldNormal = UnityObjectToWorldNormal(v.normal);
+				o.worldPos = mul(unity_ObjectToWorld,v.vertex);
+				return o;
+			}
 
-            struct v2f
-            {
-                float2 uv : TEXCOORD0;
-                UNITY_FOG_COORDS(1)
-                float4 vertex : SV_POSITION;
-            };
+			sampler2D _ShadowTex;
+			float3 _ProjectorWorldPos;
 
-            sampler2D _MainTex;
-            float4 _MainTex_ST;
+			fixed4 frag(v2f i) : SV_Target
+			{
+				fixed4 texS;
 
-            v2f vert (appdata v)
-            {
-                v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                UNITY_TRANSFER_FOG(o,o.vertex);
-                return o;
-            }
+				float dotValue = dot(_ProjectorWorldPos - i.worldPos ,normalize(i.worldNormal));
 
-            fixed4 frag (v2f i) : SV_Target
-            {
-                // sample the texture
-                fixed4 col = tex2D(_MainTex, i.uv);
-                // apply fog
-                UNITY_APPLY_FOG(i.fogCoord, col);
-                return col;
-            }
-            ENDCG
-        }
-    }
+				if(dotValue > 0){
+					if (i.uvShadow.x >= 0.01 && i.uvShadow.x <= 0.99
+					&& i.uvShadow.y >= 0.01 && i.uvShadow.y <= 0.99) {
+						texS = tex2Dproj(_ShadowTex,UNITY_PROJ_COORD(i.uvShadow));
+					}
+					else {
+						texS = fixed4(1,1,1,0);
+					}
+				}else{
+					texS = fixed4(1,1,1,0);
+				}
+				return texS;
+
+			}
+			ENDCG
+		}
+	}
 }
