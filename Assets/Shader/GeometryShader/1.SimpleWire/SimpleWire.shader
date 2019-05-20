@@ -1,4 +1,4 @@
-﻿Shader "Unlit/SimpleWire"
+﻿Shader "Kasug/GeomertyShader/SimpleWire"
 {
   Properties 
     { 

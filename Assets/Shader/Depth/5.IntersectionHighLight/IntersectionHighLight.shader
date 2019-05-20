@@ -1,4 +1,4 @@
-﻿Shader "Unlit/IntersectionHighLight"
+﻿Shader "Kasug/Depth/IntersectionHighLight"
 {
 
 	Properties

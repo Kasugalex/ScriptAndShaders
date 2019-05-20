@@ -1,6 +1,6 @@
 ﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-Shader "Unlit/Test"
+Shader "Kasug/NoAddAlpha"
 {
 Properties   
     {   

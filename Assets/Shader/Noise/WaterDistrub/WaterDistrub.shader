@@ -1,4 +1,4 @@
-﻿Shader "Unlit/WaterDistrub"
+﻿Shader "Kasug/Noise/WaterDistrub"
 {
 	Properties
 	{

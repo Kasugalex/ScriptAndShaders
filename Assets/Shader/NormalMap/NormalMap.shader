@@ -1,5 +1,5 @@
 ﻿
-Shader "Unlit/NormalMap"
+Shader "Kasug/NormalMap"
 {
 	//属性  
     Properties{  

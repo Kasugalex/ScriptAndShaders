@@ -1,4 +1,4 @@
-﻿Shader "Unlit/OutLineByViewDir"
+﻿Shader "Kasug/OutLineByViewDir"
 {
 	Properties
 	{

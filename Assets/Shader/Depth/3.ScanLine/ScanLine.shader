@@ -1,4 +1,4 @@
-﻿Shader "Unlit/ScanLine"
+﻿Shader "Kasug/Depth/ScanLine"
 {
 	Properties
 	{

@@ -1,4 +1,4 @@
-﻿Shader "Unlit/RimFade"
+﻿Shader "Kasug/RimFade"
 {
 	Properties
 	{

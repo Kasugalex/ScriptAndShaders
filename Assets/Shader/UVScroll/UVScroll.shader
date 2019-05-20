@@ -1,4 +1,4 @@
-﻿Shader "Unlit/UVScroll"
+﻿Shader "Kasug/UVScroll"
 {
 	Properties
 	{

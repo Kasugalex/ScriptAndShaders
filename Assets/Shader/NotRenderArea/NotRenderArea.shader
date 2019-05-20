@@ -1,4 +1,4 @@
-﻿Shader "Unlit/NotRenderArea"
+﻿Shader "Kasug/NotRenderArea"
 {
     Properties
     {

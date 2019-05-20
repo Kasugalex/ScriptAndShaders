@@ -1,4 +1,4 @@
-﻿Shader "Unlit/MyShaderWithInstance"
+﻿Shader "Kasug/MyShaderWithInstance"
 {
 	Properties
 	{

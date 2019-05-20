@@ -1,4 +1,4 @@
-﻿Shader "Unlit/KiMosaicTest"
+﻿Shader "Kasug/KiMosaicTest"
 {
 	Properties
 	{

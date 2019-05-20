@@ -1,4 +1,4 @@
-﻿Shader "Unlit/PerlinNoise"
+﻿Shader "Kasug/Noise/PerlinNoise"
 {
 	Properties
 	{

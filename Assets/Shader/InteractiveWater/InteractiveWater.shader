@@ -1,4 +1,4 @@
-﻿Shader "Unlit/InteractiveWater"
+﻿Shader "Kasug/InteractiveWater"
 {
 	Properties
 	{

@@ -1,7 +1,7 @@
 ﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 // Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-Shader "Unlit/GlassRefraction" {
+Shader "Kasug/GlassRefraction" {
 	Properties {
 		_MainTex ("Main Tex", 2D) = "white" {}
 		_BumpMap ("Normal Map", 2D) = "bump" {}

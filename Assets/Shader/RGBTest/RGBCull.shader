@@ -1,4 +1,4 @@
-﻿Shader "Unlit/RGBCull"
+﻿Shader "Kasug/RGBCull"
 {
 	Properties
 	{

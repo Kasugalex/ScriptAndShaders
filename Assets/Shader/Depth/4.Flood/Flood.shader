@@ -1,4 +1,4 @@
-﻿Shader "Unlit/Flood"
+﻿Shader "Kasug/Depth/Flood"
 {
 	Properties
 	{
