@@ -60,12 +60,11 @@ namespace Kasug
             CheckInit();
             base.Update();
 
-            if (Input.GetMouseButtonDown(0))
+            if (ExplosionManager.Instance.explode)
             {
-
-                if (show)
-                    StartCoroutine(Repeater());
-                show = false;
+                StartCoroutine(Repeater());
+                show = true;
+                ExplosionManager.Instance.explode = false;
             }
         }
 
@@ -122,10 +121,10 @@ namespace Kasug
             }
         }
 
-        bool show = true;
+        bool show = false;
         private void OnGUI()
         {
-            if (!show) return;
+            if (show) return;
             GUIStyle style = new GUIStyle();
             style.fontSize = 40;
             style.normal.textColor = Color.white;
