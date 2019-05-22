@@ -186,13 +186,13 @@ namespace Kasug
             }
 
             particleMesh.vertices = vertices;
-            particleMesh.uv = uvs;
+            //particleMesh.uv = uvs;
 
             particleMesh.SetIndices(indices, MeshTopology.Points, 0);
-            particleMesh.RecalculateBounds();
-            var bounds = particleMesh.bounds;
-            bounds.size = bounds.size * 100f;
-            particleMesh.bounds = bounds;
+            //particleMesh.RecalculateBounds();
+            //var bounds = particleMesh.bounds;
+            //bounds.size = bounds.size * 100f;
+            //particleMesh.bounds = bounds;
 
             return particleMesh;
         }
