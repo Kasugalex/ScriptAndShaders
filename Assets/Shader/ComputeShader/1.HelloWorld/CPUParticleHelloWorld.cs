@@ -35,7 +35,7 @@ public class CPUParticleHelloWorld : MonoBehaviour
         material.SetPass(0);
         material.SetBuffer("pointsBuffer", outputBuffer);
         material.SetBuffer("colorBuffer", colorBuffer);
-        Graphics.DrawProcedural(MeshTopology.Lines, vertexCount);
+        Graphics.DrawProcedural(MeshTopology.Points, vertexCount);
     }
 
     private void Dispatch()
