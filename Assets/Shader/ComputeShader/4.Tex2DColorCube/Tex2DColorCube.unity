@@ -142,9 +142,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   edgeLength: 100
-  particleMaterial: {fileID: 2100000, guid: 35d3c1fb843e4134f99ad085a386530a, type: 2}
+  particleMaterial: {fileID: 2100000, guid: 641faf4c10dd268448c0b4250215912c, type: 2}
   updateShader: {fileID: 7200000, guid: 00e4ff67740b909469ee4297baee8a10, type: 3}
   deceleration: 1
+  m: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &137050938
 Transform:
   m_ObjectHideFlags: 0
