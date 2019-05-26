@@ -3,67 +3,6 @@ using UnityEngine;
 
 public class CameraShakeEffect : MonoBehaviour
 {
-
-    /*public Vector3 shakeFactor = Vector3.one;
-
-    public float shakeTime = 1.0f;
-    public float recoverSpeed = 1.0f;
-    private float currentTime = 0.0f;
-    private float totalTime = 0.0f;
-
-    private Vector3 oriPos;
-    private Transform trans;
-
-    private void Awake()
-    {
-        trans = transform;
-    }
-
-    void OnEnable()
-    {
-        oriPos = trans.position;
-        Trigger();
-    }
-
-    public void Trigger()
-    {
-        totalTime = shakeTime;
-        currentTime = shakeTime;
-    }
-
-    public void UpdateShake()
-    {
-        if (currentTime > 0.0f && totalTime > 0.0f)
-        {
-            float percent = currentTime / totalTime;
-
-            Vector3 shakePos = Vector3.zero;
-            shakePos.x = Random.Range(-Mathf.Abs(shakeFactor.x) * percent, Mathf.Abs(shakeFactor.x) * percent);
-            shakePos.y = Random.Range(-Mathf.Abs(shakeFactor.y) * percent, Mathf.Abs(shakeFactor.y) * percent);
-            shakePos.z = Random.Range(-Mathf.Abs(shakeFactor.z) * percent, Mathf.Abs(shakeFactor.z) * percent);
-
-            trans.position += shakePos;
-
-            currentTime -= Time.deltaTime;
-        }
-        else
-        {
-            trans.position = Vector3.Lerp(trans.position, oriPos, Time.deltaTime * recoverSpeed);
-            if(trans.position.sqrMagnitude - oriPos.sqrMagnitude <= 0.1f)
-            {
-                currentTime = 0.0f;
-                totalTime = 0.0f;
-                this.enabled = false;
-            }
-        }
-    }
-
-    void LateUpdate()
-    {
-        UpdateShake();
-    }
-
-    */
     public float shakeLevel = 3f;
     public float setShakeTime = 0.5f;   
     public float shakeFps = 60f;   
