@@ -65,11 +65,11 @@ Material:
     - _ParallaxStrength: 0
     - _Smoothness: 0.1
     - _SrcBlend: 1
-    - _WireframeSmoothing: 1.8
-    - _WireframeThickness: 0.2
+    - _WireframeSmoothing: 2.5
+    - _WireframeThickness: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 0, b: 0, a: 1}
     - _Emission: {r: 0, g: 0, b: 0, a: 1}
     - _Tint: {r: 1, g: 1, b: 1, a: 1}
-    - _WireframeColor: {r: 0, g: 0, b: 0, a: 1}
+    - _WireframeColor: {r: 0, g: 0.2905655, b: 1, a: 1}
