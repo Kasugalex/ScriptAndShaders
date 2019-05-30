@@ -1,8 +1,7 @@
 ﻿#if !defined(FLAT_WIREFRAME_INCLUDED)
 #define FLAT_WIREFRAME_INCLUDED
 
-#define CUSTOM_GEOMETRY_INTERPOLATORS \
-	float2 barycentricCoordinates : TEXCOORD9;
+#define CUSTOM_GEOMETRY_INTERPOLATORS float2 barycentricCoordinates : TEXCOORD9;
 
 #include "My Lighting Input.cginc"
 

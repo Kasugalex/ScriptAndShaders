@@ -4,8 +4,9 @@
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: WireFrame
   m_Shader: {fileID: 4800000, guid: 9f213ba4404f05b4f9bb1d8cc73d8ed2, type: 3}
   m_ShaderKeywords: ENABLE_DRAWQUAD
@@ -21,7 +22,7 @@ Material:
     m_Floats:
     - _Cull: 2
     - _DrawQuad: 1
-    - _WireThickness: 795
+    - _WireThickness: 669
     m_Colors:
     - _BackColor: {r: 1, g: 1, b: 1, a: 0}
     - _LineColor: {r: 1, g: 0.6827587, b: 0, a: 1}
