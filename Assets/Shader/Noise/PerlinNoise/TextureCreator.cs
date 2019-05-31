@@ -44,7 +44,7 @@ public class TextureCreator : MonoBehaviour
         Vector3 point11 = transform.TransformPoint(new Vector3(0.5f, 0.5f));
 
         float stepSize = 1f / resolution;
-        //Random.seed = 42;
+        Random.seed = 42;
         for (int y = 0; y < resolution; y++)
         {
             Vector3 point0 = Vector3.Lerp(point00, point01, (y + 0.5f) * stepSize);
