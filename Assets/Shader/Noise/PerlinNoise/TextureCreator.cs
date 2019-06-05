@@ -10,7 +10,7 @@ public class TextureCreator : MonoBehaviour
     [Range(1, 3)]
     public int dimensions = 3;
 
-    public NosieMethodType type;
+    public NoiseMethodType type;
 
     [Range(1, 8)]
     public int octaves = 1;
@@ -70,7 +70,7 @@ public class TextureCreator : MonoBehaviour
             {
                 Vector3 point = Vector3.Lerp(point0, point1, (x + 0.5f) * stepSize);
                 float sample = Noise.Sum(method, point, frequency, octaves, lacunarity, persistence);
-                if (type != NosieMethodType.Value)
+                if (type != NoiseMethodType.Value)
                 {
                     sample = sample * 0.5f + 0.5f;
                 }

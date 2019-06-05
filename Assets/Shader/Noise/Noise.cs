@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 public delegate float NoiseMethod(Vector3 point, float frequency);
-public enum NosieMethodType
+public enum NoiseMethodType
 {
     Value,
     Perlin
