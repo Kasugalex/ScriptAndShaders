@@ -7,10 +7,18 @@ public class GlobalTest : MonoBehaviour
 {
     public Material m;
     List<GameObject> allObjects = new List<GameObject>();
-    // Use this for initialization
+    public Transform target;
     void Start()
     {
 
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            target.position = Vector3.Slerp(target.position, new Vector3(100, 0, 0),0.01f);
+        }
     }
 
     void EqualTest()
