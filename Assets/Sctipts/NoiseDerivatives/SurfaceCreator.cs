@@ -22,12 +22,19 @@ public class SurfaceCreator : MonoBehaviour
     [Range(0f, 1f)]
     public float persistence = 0.5f;
 
+    [Range(0f, 1f)]
+    public float strength = 1f;
+
     [Range(1, 3)]
     public int dimensions = 3;
 
     public NoiseMethodType type;
 
     public Gradient coloring;
+
+    public bool coloringForStrength;
+
+    public bool showNormals;
 
     private int currentResolution;
     private Mesh mesh;
@@ -69,13 +76,24 @@ public class SurfaceCreator : MonoBehaviour
                 Vector3 point = Vector3.Lerp(point0, point1, x * stepSize);
                 float sample = Noise.Sum(method, point, frequency, octaves, lacunarity, persistence);
                 sample = type == NoiseMethodType.Value ? (sample - 0.5f) : (sample * 0.5f);
+                if (coloringForStrength)
+                {
+                    colors[v] = coloring.Evaluate(sample + 0.5f);
+                    sample *= strength;
+                }
+                else
+                {
+                    sample *= strength;
+                    colors[v] = coloring.Evaluate(sample + 0.5f);
+                }
                 vertices[v].y = sample;
-                colors[v] = coloring.Evaluate(sample + 0.5f);
             }
         }
         mesh.vertices = vertices;
         mesh.colors = colors;
-        mesh.RecalculateNormals();
+        //mesh.RecalculateNormals();
+        CalculateNormals();
+        mesh.normals = normals;
     }
 
     private void CreateGrid()
@@ -120,5 +138,84 @@ public class SurfaceCreator : MonoBehaviour
 
         mesh.triangles = triangles;
 
+    }
+
+    private void CalculateNormals()
+    {
+        for (int v = 0, z = 0; z <= resolution; z++)
+        {
+            for (int x = 0; x <= resolution; x++, v++)
+            {
+                normals[v] = new Vector3(-GetXDerivative(x, z), 1f, -GetZDerivative(x, z)).normalized;
+            }
+        }
+    }
+
+    private float GetXDerivative(int x ,int z)
+    {
+        int rowOffset = z * (resolution + 1);
+        float left, right, scale;
+        if (x > 0)
+        {
+            left = vertices[rowOffset + x - 1].y;
+            if (x < resolution)
+            {
+                right = vertices[rowOffset + x + 1].y;
+                scale = 0.5f * resolution;
+            }
+            else
+            {
+                right = vertices[rowOffset + x].y;
+                scale = resolution;
+            }
+        }
+        else
+        {
+            left = vertices[rowOffset + x].y;
+            right = vertices[rowOffset + x + 1].y;
+            scale = resolution;
+        }
+        return (right - left) * scale;
+    }
+
+    private float GetZDerivative(int x ,int z)
+    {
+        int rowLength = resolution + 1;
+        float back, forward, scale;
+        if (z > 0)
+        {
+            back = vertices[(z - 1) * rowLength + x].y;
+            if (z < resolution)
+            {
+                forward = vertices[(z + 1) * rowLength + x].y;
+                scale = 0.5f * resolution;
+            }
+            else
+            {
+                forward = vertices[z * rowLength + x].y;
+                scale = resolution;
+            }
+        }
+        else
+        {
+            back = vertices[z * rowLength + x].y;
+            forward = vertices[(z + 1) * rowLength + x].y;
+            scale = resolution;
+        }
+
+        return (forward - back) * scale;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if(showNormals && vertices != null)
+        {
+            float scale = 1f / resolution;
+            Gizmos.color = Color.yellow;
+            for (int v = 0; v < vertices.Length; v++)
+            {
+                Gizmos.DrawRay(vertices[v], normals[v] * scale);
+            }
+        }
     }
 }

@@ -346,6 +346,7 @@ MonoBehaviour:
   octaves: 5
   lacunarity: 2
   persistence: 0.5
+  strength: 1
   dimensions: 3
   type: 1
   coloring:
@@ -377,6 +378,8 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 5
     m_NumAlphaKeys: 2
+  coloringForStrength: 1
+  showNormals: 1
 --- !u!4 &1924261642
 Transform:
   m_ObjectHideFlags: 0
