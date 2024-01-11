@@ -15,7 +15,7 @@ Shader "Comic/CBB/HalfLambert"
 		{
 			Blend SrcAlpha OneMinusSrcAlpha
 			CGPROGRAM
-            #pragma multi_compile_fwdbase   // ±àÒëPassType.ForwardBaseËùĞèµÄËùÓĞ±äÌå¡£±äÌå´¦Àí²»Í¬µÄ¹âÕÕÌùÍ¼ÀàĞÍ£¬²¢ÆôÓÃ»ò½ûÓÃÖ÷·½Ïò¹âµÄÒõÓ°
+            #pragma multi_compile_fwdbase   // ç¼–è¯‘PassType.ForwardBaseæ‰€éœ€çš„æ‰€æœ‰å˜ä½“ã€‚å˜ä½“å¤„ç†ä¸åŒçš„å…‰ç…§è´´å›¾ç±»å‹ï¼Œå¹¶å¯ç”¨æˆ–ç¦ç”¨ä¸»æ–¹å‘å…‰çš„é˜´å½±
 			#pragma vertex vert
 			#pragma fragment frag
 			#include "Lighting.cginc"
@@ -30,7 +30,7 @@ Shader "Comic/CBB/HalfLambert"
 
             struct v2f
             {
-                float4 vertex : SV_POSITION;
+                float4 pos : SV_POSITION; //ç”¨TRANSFER_SHADOWæ–¹æ³•ï¼Œv2fçš„é¡¶ç‚¹ä½ç½®å˜é‡åä¸€å®šè¦æ˜¯posï¼Œå¦‚æœç”¨äº†å…¶ä»–åå­—ï¼Œä¼šæŠ¥é”™ï¼šinvalid subscript â€˜posâ€™ â€˜ComputeScreenPosâ€™: no matching 1 parameter function (on d3d11)
                 fixed3 worldNormal : TEXCOORD0; 
                 float2 uv : TEXCOORD1;
                 float3 worldPos: TEXCOORD2;
@@ -44,7 +44,7 @@ Shader "Comic/CBB/HalfLambert"
 			v2f vert (appdata v)
 			{
                 v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);
+                o.pos = UnityObjectToClipPos(v.vertex);
                 o.worldNormal = UnityObjectToWorldNormal(v.normal);
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
                 o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
@@ -61,7 +61,7 @@ Shader "Comic/CBB/HalfLambert"
                 fixed3 worldLight = normalize(_WorldSpaceLightPos0.xyz);
                 fixed3 diffuse = texColor * (dot(worldLight, worldNormal) * 0.5 + 0.5);
 
-                UNITY_LIGHT_ATTENUATION(atten, i, i.worldPos); //¹âÕÕË¥¼õ+½ÓÊÕÒõÓ°ºê
+                UNITY_LIGHT_ATTENUATION(atten, i, i.worldPos); //å…‰ç…§è¡°å‡+æ¥æ”¶é˜´å½±å®
                 return fixed4(diffuse * atten, _Alpha);
 			}
 			ENDCG
