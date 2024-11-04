@@ -1,11 +1,7 @@
-using Sys = System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using UnityEditor;
 using UnityEngine;
 using UnityEditor.Experimental.SceneManagement;
-using System.Reflection;
 
 public class AssetReferenceFinder : EditorWindow
 {
@@ -125,7 +121,7 @@ public class AssetReferenceFinder : EditorWindow
             {
                 DisplayReferenceObject(target, "当前搜索：");
 
-                if(referenceObjects.Count > 0)
+                if (referenceObjects.Count > 0)
                 {
                     EditorGUILayout.Space(5);
                     EditorGUILayout.BeginHorizontal();
@@ -151,14 +147,6 @@ public class AssetReferenceFinder : EditorWindow
                                     GameObject instanceRoot = null;
 #if UNITY_2022_3_OR_NEWER
                                     instanceRoot = UnityEditor.SceneManagement.PrefabStageUtility.OpenPrefab(item.Path).prefabContentsRoot;
-                                    if (instanceRoot != null)
-                                    {
-                                        var rootTrans = instanceRoot.transform;
-                                        var targetTrans = rootTrans.Find(objNodeName);
-                                        Selection.activeTransform = targetTrans;
-                                        SceneView.lastActiveSceneView.FrameSelected();
-                                        EditorGUIUtility.PingObject(targetTrans);
-                                    }
 #else
                                     AssetDatabase.OpenAsset(item.Target);
                                     var curStage = PrefabStageUtility.GetCurrentPrefabStage();
