@@ -361,7 +361,7 @@ public class AssetReferenceFinder : EditorWindow
 
                                     foreach (var pName in texturePropertyNames)
                                     {
-                                        if (mat.HasProperty(pName) && mat.GetTexture(pName) == asset)
+                                        if (mat != null && mat.HasProperty(pName) && mat.GetTexture(pName) == asset)
                                         {
                                             allComs.Add(com);
                                             break;
