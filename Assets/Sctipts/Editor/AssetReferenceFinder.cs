@@ -289,7 +289,7 @@ public class AssetReferenceFinder : EditorWindow
         public readonly string Name;
         public readonly Object Target;
         public readonly string Path;
-        public readonly Component[] gameObjects;
+        public Component[] gameObjects { get; private set; }
 
         #endregion
 
@@ -306,25 +306,50 @@ public class AssetReferenceFinder : EditorWindow
             {
                 var obj = target as GameObject;
 
-                if (asset is MonoScript monoScript)
+                if (asset is MonoScript)
                 {
-                    var classType = monoScript.GetClass();
-                    if (typeof(MonoBehaviour).IsAssignableFrom(classType))
-                    {
-                        var components = obj.GetComponentsInChildren(classType, true);
-                        if (components.Length > 0)
-                        {
-                            gameObjects = components;
-                        }
-                    }
+                    OnProcessMonoScript(obj, asset);
                 }
                 else if (asset is Texture)
                 {
-                    var components = obj.GetComponentsInChildren<Renderer>(true);
-                    List<Component> allComs = new List<Component>();
-                    if (components.Length > 0)
-                    {
-                        string[] texturePropertyNames = {
+                    OnProcessTexture(obj, asset);
+                }
+                else if (asset is Material)
+                {
+                    OnProcessMaterial(obj, asset);
+                }
+                else if (asset is Shader)
+                {
+                    OnProcessShader(obj, asset);
+                }
+                else if (asset is GameObject)
+                {
+                    OnProcessGameObject(obj, asset);
+                }
+            }
+        }
+
+        private void OnProcessMonoScript(GameObject obj,Object asset)
+        {
+            var monoScript = asset as MonoScript;
+            var classType = monoScript.GetClass();
+            if (typeof(MonoBehaviour).IsAssignableFrom(classType))
+            {
+                var components = obj.GetComponentsInChildren(classType, true);
+                if (components.Length > 0)
+                {
+                    gameObjects = components;
+                }
+            }
+        }
+
+        private void OnProcessTexture(GameObject obj, Object asset)
+        {
+            var components = obj.GetComponentsInChildren<Renderer>(true);
+            List<Component> allComs = new List<Component>();
+            if (components.Length > 0)
+            {
+                string[] texturePropertyNames = {
                             "_MainTex",
                             "_Bump",         // 法线贴图
                             "_MetallicGlossMap", // 金属光泽贴图
@@ -334,121 +359,122 @@ public class AssetReferenceFinder : EditorWindow
                             "_EmissionMap",  // 自发光贴图
                             // 添加其他贴图属性名
                         };
-                        foreach (var com in components)
+                foreach (var com in components)
+                {
+                    if (com.sharedMaterials != null)
+                    {
+                        foreach (var mat in com.sharedMaterials)
                         {
-                            if (com.sharedMaterials != null)
+                            if (mat != null && mat.mainTexture != null && mat.mainTexture.name == asset.name)
                             {
-                                foreach (var mat in com.sharedMaterials)
-                                {
-                                    if (mat != null && mat.mainTexture.name == asset.name)
-                                    {
-                                        allComs.Add(com);
-                                        // 避免重复添加 break
-                                        break;
-                                    }
+                                allComs.Add(com);
+                                // 避免重复添加 break
+                                break;
+                            }
 
-                                    foreach (var pName in texturePropertyNames)
-                                    {
-                                        if (mat != null && mat.HasProperty(pName) && mat.GetTexture(pName) == asset)
-                                        {
-                                            allComs.Add(com);
-                                            break;
-                                        }
-                                    }
+                            foreach (var pName in texturePropertyNames)
+                            {
+                                if (mat != null && mat.HasProperty(pName) && mat.GetTexture(pName) == asset)
+                                {
+                                    allComs.Add(com);
+                                    break;
                                 }
                             }
                         }
-
-                    }
-
-                    var imgs = obj.GetComponentsInChildren<UnityEngine.UI.Image>(true);
-                    foreach (var com in imgs)
-                    {
-                        if (com.sprite == asset)
-                        {
-                            allComs.Add(com);
-                        }
-                    }
-
-                    var rawImgs = obj.GetComponentsInChildren<UnityEngine.UI.RawImage>(true);
-                    foreach (var com in imgs)
-                    {
-                        if (com.mainTexture == asset)
-                        {
-                            allComs.Add(com);
-                        }
-                    }
-
-                    gameObjects = allComs.ToArray();
-                }
-                else if (asset is Material)
-                {
-                    var components = obj.GetComponentsInChildren<Renderer>(true);
-                    if (components.Length > 0)
-                    {
-                        List<Component> allComs = new List<Component>();
-                        foreach (var com in components)
-                        {
-                            if (com.sharedMaterials != null)
-                            {
-                                foreach (var mat in com.sharedMaterials)
-                                {
-                                    if (mat == asset)
-                                    {
-                                        allComs.Add(com);
-                                        // 避免重复添加 break
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        gameObjects = allComs.ToArray();
                     }
                 }
-                else if (asset is Shader)
+
+            }
+
+            var imgs = obj.GetComponentsInChildren<UnityEngine.UI.Image>(true);
+            foreach (var com in imgs)
+            {
+                if (com.sprite == asset)
                 {
-                    var components = obj.GetComponentsInChildren<Renderer>(true);
-                    if (components.Length > 0)
-                    {
-                        List<Component> allComs = new List<Component>();
-                        foreach (var com in components)
-                        {
-                            if (com.sharedMaterials != null)
-                            {
-                                foreach (var mat in com.sharedMaterials)
-                                {
-                                    if (mat != null && mat.shader == asset)
-                                    {
-                                        allComs.Add(com);
-                                        // 避免重复添加 break
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        gameObjects = allComs.ToArray();
-                    }
-                }
-                else if (asset is GameObject)
-                {
-                    List<Component> allComs = new List<Component>();
-                    var curAssetPath = AssetDatabase.GetAssetPath(asset);
-                    var allChilds = obj.transform.GetComponentsInChildren<Transform>(true);
-                    foreach (var item in allChilds)
-                    {
-                        if (PrefabUtility.IsAnyPrefabInstanceRoot(item.gameObject))
-                        {
-                            Transform originAsset = PrefabUtility.GetCorrespondingObjectFromOriginalSource(item);
-                            string prefabPath = AssetDatabase.GetAssetPath(originAsset);
-                            if (prefabPath == curAssetPath)
-                            {
-                                allComs.Add(item);
-                            }
-                        }
-                    }
-                    gameObjects = allComs.ToArray();
+                    allComs.Add(com);
                 }
             }
+
+            var rawImgs = obj.GetComponentsInChildren<UnityEngine.UI.RawImage>(true);
+            foreach (var com in imgs)
+            {
+                if (com.mainTexture == asset)
+                {
+                    allComs.Add(com);
+                }
+            }
+
+            gameObjects = allComs.ToArray();
+        }
+
+        private void OnProcessMaterial(GameObject obj, Object asset)
+        {
+            var components = obj.GetComponentsInChildren<Renderer>(true);
+            if (components.Length > 0)
+            {
+                List<Component> allComs = new List<Component>();
+                foreach (var com in components)
+                {
+                    if (com.sharedMaterials != null)
+                    {
+                        foreach (var mat in com.sharedMaterials)
+                        {
+                            if (mat == asset)
+                            {
+                                allComs.Add(com);
+                                // 避免重复添加 break
+                                break;
+                            }
+                        }
+                    }
+                }
+                gameObjects = allComs.ToArray();
+            }
+        }
+
+        private void OnProcessShader(GameObject obj, Object asset)
+        {
+            var components = obj.GetComponentsInChildren<Renderer>(true);
+            if (components.Length > 0)
+            {
+                List<Component> allComs = new List<Component>();
+                foreach (var com in components)
+                {
+                    if (com.sharedMaterials != null)
+                    {
+                        foreach (var mat in com.sharedMaterials)
+                        {
+                            if (mat != null && mat.shader == asset)
+                            {
+                                allComs.Add(com);
+                                // 避免重复添加 break
+                                break;
+                            }
+                        }
+                    }
+                }
+                gameObjects = allComs.ToArray();
+            }
+        }
+
+        private void OnProcessGameObject(GameObject obj, Object asset)
+        {
+            List<Component> allComs = new List<Component>();
+            var curAssetPath = AssetDatabase.GetAssetPath(asset);
+            var allChilds = obj.transform.GetComponentsInChildren<Transform>(true);
+            foreach (var item in allChilds)
+            {
+                if (PrefabUtility.IsAnyPrefabInstanceRoot(item.gameObject))
+                {
+                    Transform originAsset = PrefabUtility.GetCorrespondingObjectFromOriginalSource(item);
+                    string prefabPath = AssetDatabase.GetAssetPath(originAsset);
+                    if (prefabPath == curAssetPath)
+                    {
+                        allComs.Add(item);
+                    }
+                }
+            }
+            gameObjects = allComs.ToArray();
         }
 
         #endregion
